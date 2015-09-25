@@ -103,18 +103,18 @@ def show_menu(channel, buff):
         outputs.append([channel, "Sorry hungry person, No weekend meals.Use the vending machine. :stuck_out_tongue_winking_eye:"])
 
     sql = CustomSQL()
-    query_string = "SELECT day, food, meal, option FROM food_menu WHERE day = (%s)"
+    query_string = "SELECT food, meal, option FROM food_menu WHERE day = (%s)"
     variables = (day,)
     menu = sql.query(query_string, variables)
 
     if menu:
         response = ""
         for meal in menu:
-            response = response + str(meal[0]) + '\t' + str(meal[1]) + '\t'+ str(meal[2]) + '\t' + str(meal[3]) + '\n'
+            response = response + str(meal[0]) + ' for ' + str(meal[1]) + ' as option ' + str(meal[2]) + '\t' + '\n\n'
 
         print response
 
-        outputs.append([channel, str(response)])
+        outputs.append([channel, "Here is today's menu.\n\n" + str(response)])
     else:
         outputs.append([channel, "Hey, this is not a valid day of the week."])
 
