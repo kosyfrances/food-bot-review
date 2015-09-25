@@ -40,7 +40,6 @@ class CustomSQL(object):
             result.append(row)
 
         self.disconnect()
-        print result
         return result
 
 
@@ -86,35 +85,33 @@ def process_message(data):
         outputs.append([channel, "Wrong command yo! Type `help` to get `HELP`"])
 
 
-def week_day(day):
+def get_day_of_week():
     week_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday',
                  'saturday', 'sunday']
-    return week_days[day]
+    return week_days[datetime.datetime.today().weekday()]
 
 def show_menu(channel, buff):
     if len(buff) == 1:
-        int_day = datetime.datetime.today().weekday()
-        day = week_day(int_day)
+        day = get_day_of_week()
 
     if len(buff) > 1:
         day = buff[1].lower()
 
-    if day.lower() in ['saturday', 'sunday']:
-        outputs.append([channel, "Sorry hungry person, No weekend meals.Use the vending machine. :stuck_out_tongue_winking_eye:"])
+    if day in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']:
+        sql = CustomSQL()
+        query_string = "SELECT food, meal, option FROM food_menu WHERE day = (%s)"
+        variables = (day,)
+        menu = sql.query(query_string, variables)
 
-    sql = CustomSQL()
-    query_string = "SELECT food, meal, option FROM food_menu WHERE day = (%s)"
-    variables = (day,)
-    menu = sql.query(query_string, variables)
+        if menu:
+            response = ""
+            for meal in menu:
+                response = response + str(meal[0]) + ' for ' + str(meal[1]) + ' as option ' + str(meal[2]) + '\t' + '\n\n'
+            outputs.append([channel, "Here is the menu.\n\n" + str(response)])
 
-    if menu:
-        response = ""
-        for meal in menu:
-            response = response + str(meal[0]) + ' for ' + str(meal[1]) + ' as option ' + str(meal[2]) + '\t' + '\n\n'
+    elif day in ['saturday', 'sunday']:
+        outputs.append([channel, "Sorry hungry person, no weekend meals. Use the vending machine. :stuck_out_tongue_winking_eye:"])
 
-        print response
-
-        outputs.append([channel, "Here is today's menu.\n\n" + str(response)])
     else:
         outputs.append([channel, "Hey, this is not a valid day of the week."])
 
