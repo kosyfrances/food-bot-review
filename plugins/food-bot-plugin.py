@@ -98,17 +98,12 @@ def show_menu(channel, buff):
 
     if len(buff) > 1:
         day = buff[1].lower()
-        if day not in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday',
-                       'saturday', 'sunday']:
-            outputs.append([channel, "Hey, this is not a valid day of the week."])
-            return
 
     if day.lower() in ['saturday', 'sunday']:
         outputs.append([channel, "Sorry hungry person, No weekend meals.Use the vending machine. :stuck_out_tongue_winking_eye:"])
-        return
 
     sql = CustomSQL()
-    query_string = "SELECT food, meal, option FROM food_menu WHERE day = (%s)"
+    query_string = "SELECT day, food, meal, option FROM food_menu WHERE day = (%s)"
     variables = (day,)
     menu = sql.query(query_string, variables)
 
@@ -120,6 +115,8 @@ def show_menu(channel, buff):
         print response
 
         outputs.append([channel, str(response)])
+    else:
+        outputs.append([channel, "Hey, this is not a valid day of the week."])
 
 # def check_meal_option(meal, option, channel):
 #     if meal.lower() != 'breakfast' and meal.lower() != 'lunch':
