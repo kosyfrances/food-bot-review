@@ -1,0 +1,33 @@
+To configure the bot:
+cp doc/example-config/rtmbot.conf .
+vi rtmbot.conf
+  SLACK_TOKEN: "xoxb-11111111111-222222222222222"
+
+Database name - food_bot
+Number of tables - 2
+Tables - meal, rating
+
+Rating has a one to one relationship to Meal via the meal_id.
+
+CREATE TABLE meal(id SERIAL PRIMARY KEY,
+                   day VARCHAR(10) NOT NULL,
+                   food VARCHAR(60) NOT NULL,
+                   meal VARCHAR(10) NOT NULL,
+                   option CHAR(1) NOT NULL
+                 );
+
+create table rating(id SERIAL PRIMARY KEY,
+                    date DATE NOT NULL,
+                    user_id VARCHAR(20),
+                    meal_id INT REFERENCES meal(id),
+                    rate INT NOT NULL,
+                    comment TEXT
+                   );
+
+Structure of the meal table:
+id | day | food | meal | option
+----+-----+------+------+--------
+
+Structure of the rating table
+ id | date | user_id | meal_id | rate | comment
+----+------+---------+---------+------+---------
