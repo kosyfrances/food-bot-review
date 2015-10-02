@@ -1,7 +1,9 @@
+import os
 import psycopg2
+import urlparse
 import datetime
 
-crontable = []
+# crontable = []
 outputs = []
 
 
@@ -11,6 +13,15 @@ class CustomSQL(object):
         self.conn = ""
 
     def connect(self):
+        # urlparse.uses_netloc.append("postgres")
+        # url = urlparse.urlparse(os.environ["DATABASE_URL"])
+        # self.conn = psycopg2.connect(
+        #         database=url.path[1:],
+        #         user=url.username,
+        #         password=url.password,
+        #         host=url.hostname,
+        #         port=url.port
+        # )
         conn_string = "host='localhost' dbname='food_bot'"
 
         print "Connecting to database\n ->%s" % (conn_string)
@@ -54,6 +65,7 @@ def process_message(data):
                         "\n`menu` - Get the menu for today."
                         "\n"
                         "\n`menu [day of week]` - Get the menu for any day."
+                        "\n`Example: menu tuesday`"
                         "\n"
                         "\n`rate [meal] [option] [rating]`- Rate today's meal."
                         "\n`Example: rate lunch A 10`"
@@ -99,8 +111,8 @@ def show_menu(channel, buff):
 
     if day in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']:
         sql = CustomSQL()
-        query_string = "SELECT food, meal, option FROM food_menu WHERE day = (%s)"
         variables = (day,)
+        query_string = "SELECT food, meal, option FROM food_menu WHERE day = (%s)"
         menu = sql.query(query_string, variables)
 
         if menu:
