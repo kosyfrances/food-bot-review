@@ -185,7 +185,7 @@ if __name__ == "__main__":
                                 directory
                                 ))
 
-    config = yaml.load(file(args.config or 'rtmbot.conf', 'r'))
+    config = yaml.load(file(args.config or 'rtmbot.conf' or os.environ["SLACK_TOKEN"], 'r'))
     debug = config["DEBUG"]
     bot = RtmBot(config["SLACK_TOKEN"])
     site_plugins = []
