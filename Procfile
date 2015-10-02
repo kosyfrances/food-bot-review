@@ -1,1 +1,1 @@
-web: gunicorn ./rtmbot.py.wsgi --log-file -
+web: python ./rtmbot.py
