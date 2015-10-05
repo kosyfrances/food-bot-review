@@ -191,7 +191,7 @@ if __name__ == "__main__":
         debug = config["DEBUG"]
     else:
         token = os.environ["SLACK_TOKEN"]
-        config = json.loads({'SLACK_TOKEN': token})
+        config = {'SLACK_TOKEN': token}
         debug = os.environ["DEBUG"]
     bot = RtmBot(config["SLACK_TOKEN"])
     site_plugins = []
