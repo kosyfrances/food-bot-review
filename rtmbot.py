@@ -187,7 +187,10 @@ if __name__ == "__main__":
                                 ))
 
     fileObj = StringIO.StringIO()
-    config = yaml.load((fileObj.write(os.environ["SLACK_TOKEN"])) or (file(args.config or 'rtmbot.conf', 'r')))
+    if 'rtmbot.conf':
+        config = yaml.load(file(args.config or 'rtmbot.conf', 'r'))
+    else:
+        config = fileObj.write(os.environ["SLACK_TOKEN"])
     debug = os.environ["DEBUG"] or config["DEBUG"]
     bot = RtmBot(config["SLACK_TOKEN"])
     site_plugins = []
