@@ -11,6 +11,7 @@ import sys
 import time
 import logging
 import StringIO
+import os.path
 from argparse import ArgumentParser
 
 from slackclient import SlackClient
@@ -187,7 +188,7 @@ if __name__ == "__main__":
                                 ))
 
     fileObj = StringIO.StringIO()
-    if 'rtmbot.conf':
+    if os.path.exists('./rtmbot.conf'):
         config = yaml.load(file(args.config or 'rtmbot.conf', 'r'))
     else:
         config = fileObj.write(os.environ["SLACK_TOKEN"])
