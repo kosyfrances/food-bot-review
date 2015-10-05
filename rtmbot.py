@@ -10,6 +10,7 @@ import os
 import sys
 import time
 import logging
+import StringIO
 from argparse import ArgumentParser
 
 from slackclient import SlackClient
@@ -185,9 +186,10 @@ if __name__ == "__main__":
                                 directory
                                 ))
 
-    config = yaml.load((os.environ["SLACK_TOKEN"]) or file(args.config or 'rtmbot.conf', 'r'))
+    fileObj = StringIO.StringIO()
+    config = yaml.load(fileObj.write(os.environ["SLACK_TOKEN"]) or file(args.config or 'rtmbot.conf', 'r'))
     debug = os.environ["DEBUG"] or config["DEBUG"]
-    bot = RtmBot((os.environ["SLACK_TOKEN"]) or config["SLACK_TOKEN"])
+    bot = RtmBot(config["SLACK_TOKEN"])
     site_plugins = []
     files_currently_downloading = []
     job_hash = {}
