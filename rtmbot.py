@@ -190,9 +190,10 @@ if __name__ == "__main__":
     fileObj = StringIO.StringIO()
     if os.path.exists('./rtmbot.conf'):
         config = yaml.load(file(args.config or 'rtmbot.conf', 'r'))
+        debug = config["DEBUG"]
     else:
         config = fileObj.write(os.environ["SLACK_TOKEN"])
-    debug = os.environ["DEBUG"] or config["DEBUG"]
+        debug = os.environ["DEBUG"]
     bot = RtmBot(config["SLACK_TOKEN"])
     site_plugins = []
     files_currently_downloading = []
