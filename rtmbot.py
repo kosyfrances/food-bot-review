@@ -10,7 +10,6 @@ import os
 import sys
 import time
 import logging
-import StringIO
 import os.path
 from argparse import ArgumentParser
 
@@ -187,13 +186,12 @@ if __name__ == "__main__":
                                 directory
                                 ))
 
-    file_obj = StringIO.StringIO()
     if os.path.exists('./rtmbot.conf'):
         config = yaml.load(file(args.config or 'rtmbot.conf', 'r'))
         debug = config["DEBUG"]
     else:
-        file_obj.write(os.environ["SLACK_TOKEN"])
-        config = yaml.load(file_obj.getvalue())
+        token = os.environ["SLACK_TOKEN"]
+        config = json.loads({'SLACK_TOKEN': token})
         debug = os.environ["DEBUG"]
     bot = RtmBot(config["SLACK_TOKEN"])
     site_plugins = []
