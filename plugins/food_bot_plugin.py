@@ -1,4 +1,3 @@
-import os
 import psycopg2
 import urlparse
 import datetime
@@ -13,9 +12,12 @@ class CustomSQL(object):
         self.conn = ""
 
     def connect(self):
-        if "ENVIRONMENT" in os.environ:
+        from config import Config
+        config = Config()
+
+        if config["ENVIRONMENT"] == 'production':
             urlparse.uses_netloc.append("postgres")
-            url = urlparse.urlparse(os.environ["DATABASE_URL"])
+            url = urlparse.urlparse(config["DATABASE_URL"])
             self.conn = psycopg2.connect(
                 database=url.path[1:],
                 user=url.username,

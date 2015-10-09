@@ -1,23 +1,14 @@
 #!/usr/bin/env python
 
 import sys
-sys.dont_write_bytecode = True
+# sys.dont_write_bytecode = True
 
 import glob
-import yaml
 import os
-import sys
 import time
 import logging
 import os.path
 from argparse import ArgumentParser
-
-from slackclient import SlackClient
-
-
-def dbg(debug_string):
-    if debug:
-        logging.info(debug_string)
 
 
 class RtmBot(object):
@@ -30,6 +21,8 @@ class RtmBot(object):
 
     def connect(self):
         """Convenience method that creates Server instance"""
+        from slackclient import SlackClient
+
         self.slack_client = SlackClient(self.token)
         self.slack_client.rtm_connect()
 
@@ -54,7 +47,7 @@ class RtmBot(object):
     def input(self, data):
         if "type" in data:
             function_name = "process_" + data["type"]
-            dbg("got {}".format(function_name))
+            logging.debug("got {}".format(function_name))
             for plugin in self.bot_plugins:
                 plugin.register_jobs()
                 plugin.do(function_name, data)
@@ -64,8 +57,8 @@ class RtmBot(object):
             limiter = False
             for output in plugin.do_output():
                 channel = self.slack_client.server.channels.find(output[0])
-                if channel is not None and output[1] is not None:
-                    if limiter is True:
+                if channel != None and output[1] != None:
+                    if limiter == True:
                         time.sleep(.1)
                         limiter = False
                     message = output[1].encode('ascii', 'ignore')
@@ -84,10 +77,12 @@ class RtmBot(object):
                 directory + '/plugins/*/*.py'):
             logging.info(plugin)
             name = plugin.split('/')[-1][:-3]
-#            try:
-            self.bot_plugins.append(Plugin(name))
-#            except:
-#                print "error loading plugin %s" % name
+            try:
+                self.bot_plugins.append(Plugin(name))
+            except:
+                import traceback
+                traceback_msg = traceback.format_exc()
+                logging.error("error loading plugin {name} {traceback_msg}".format(name=name, traceback_msg=traceback_msg))
 
 
 class Plugin(object):
@@ -119,14 +114,14 @@ class Plugin(object):
                 try:
                     eval("self.module." + function_name)(data)
                 except:
-                    dbg("problem in module {} {}".format(function_name, data))
+                    logging.debug("problem in module {} {}".format(function_name, data))
             else:
                 eval("self.module." + function_name)(data)
         if "catch_all" in dir(self.module):
             try:
                 self.module.catch_all(data)
             except:
-                dbg("problem in catch all")
+                logging.debug("problem in catch all")
 
     def do_jobs(self):
         for job in self.jobs:
@@ -164,7 +159,7 @@ class Job(object):
                 try:
                     self.function()
                 except:
-                    dbg("problem")
+                    logging.debug("problem")
             else:
                 self.function()
             self.lastrun = time.time()
@@ -200,31 +195,32 @@ def parse_args():
 
 
 if __name__ == "__main__":
+    from config import Config
+
     args = parse_args()
     directory = os.path.dirname(sys.argv[0])
     if not directory.startswith('/'):
         directory = os.path.abspath("{}/{}".format(os.getcwd(),
                                                    directory
                                                    ))
-
+    config = Config()
     if os.path.exists('./rtmbot.conf'):
-        config = yaml.load(file(args.config or 'rtmbot.conf', 'r'))
-        token = config["SLACK_TOKEN"]
-        debug = config["DEBUG"]
-        # environment = config["ENVIRONMENT"]
-        daemon_mode = 'DAEMON' in config
+        config.load_yaml(args.config or 'rtmbot.conf')
+
     else:
-        token = os.environ["SLACK_TOKEN"]
-        debug = os.environ["DEBUG"]
-        # environment = os.environ["ENVIRONMENT"]
-        daemon_mode = 'DAEMON' in os.environ
+        config.load_os_environ_vars('FB__')
+
+    logging.basicConfig(filename='debug.log',
+                        level=logging.DEBUG if config["DEBUG"] else logging.INFO)
+    token = config["SLACK_TOKEN"]
+    debug = config["DEBUG"]
 
     bot = RtmBot(token)
     site_plugins = []
     files_currently_downloading = []
     job_hash = {}
 
-    if daemon_mode:
+    if config["DAEMON"]:
         import daemon
         with daemon.DaemonContext():
             main_loop()
