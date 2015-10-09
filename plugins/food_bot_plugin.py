@@ -13,20 +13,23 @@ class CustomSQL(object):
         self.conn = ""
 
     def connect(self):
-        # urlparse.uses_netloc.append("postgres")
-        # url = urlparse.urlparse(os.environ["DATABASE_URL"])
-        # self.conn = psycopg2.connect(
-        #         database=url.path[1:],
-        #         user=url.username,
-        #         password=url.password,
-        #         host=url.hostname,
-        #         port=url.port
-        # )
-        conn_string = "host='localhost' dbname='food_bot'"
+        if "ENVIRONMENT" in os.environ:
+            urlparse.uses_netloc.append("postgres")
+            url = urlparse.urlparse(os.environ["DATABASE_URL"])
+            self.conn = psycopg2.connect(
+                database=url.path[1:],
+                user=url.username,
+                password=url.password,
+                host=url.hostname,
+                port=url.port
+            )
 
-        print "Connecting to database\n ->%s" % (conn_string)
+        else:
+            conn_string = "host='localhost' dbname='food_bot'"
 
-        self.conn = psycopg2.connect(conn_string)
+            print "Connecting to database\n ->%s" % (conn_string)
+
+            self.conn = psycopg2.connect(conn_string)
 
         # conn.cursor will return a cursor object
         # you can use this cursor to perform queries
