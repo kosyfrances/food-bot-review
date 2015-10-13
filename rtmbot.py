@@ -212,6 +212,7 @@ if __name__ == "__main__":
 
     logging.basicConfig(filename='debug.log',
                         level=logging.DEBUG if config["DEBUG"] else logging.INFO)
+    logging.info('Bot is stated')
     token = config["SLACK_TOKEN"]
     debug = config["DEBUG"]
 
