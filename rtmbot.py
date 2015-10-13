@@ -35,7 +35,7 @@ class RtmBot(object):
             self.crons()
             self.output()
             self.autoping()
-            time.sleep(.1)
+            time.sleep(.5)
 
     def autoping(self):
         # hardcode the interval to 3 seconds
