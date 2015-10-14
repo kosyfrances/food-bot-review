@@ -197,36 +197,44 @@ def parse_args():
 
 
 if __name__ == "__main__":
-    print "Bot is started"
-    from config import Config
+    print "Bot is started line 200"
+    try:
+        from config import Config
 
-    args = parse_args()
-    directory = os.path.dirname(sys.argv[0])
-    if not directory.startswith('/'):
-        directory = os.path.abspath("{}/{}".format(os.getcwd(),
-                                                   directory
-                                                   ))
-    config = Config()
-    if os.path.exists('./rtmbot.conf'):
-        config.load_yaml(args.config or 'rtmbot.conf')
+        args = parse_args()
+        directory = os.path.dirname(sys.argv[0])
+        if not directory.startswith('/'):
+            directory = os.path.abspath("{}/{}".format(os.getcwd(),
+                                                       directory
+                                                       ))
+        config = Config()
+        print "After config class is called line 210"
+        if os.path.exists('./rtmbot.conf'):
+            config.load_yaml(args.config or 'rtmbot.conf')
 
-    else:
-        config.load_os_environ_vars('FB__')
+        else:
+            print "Get os envvars line 215"
+            config.load_os_environ_vars('FB__')
 
-    logging.basicConfig(stream=sys.stdout, filename='debug.log',
-                        level=logging.DEBUG if config["DEBUG"] else logging.INFO)
-    logging.info('Bot is')
-    token = config["SLACK_TOKEN"]
-    debug = config["DEBUG"]
+        logging.basicConfig(stream=sys.stdout, filename='debug.log',
+                            level=logging.DEBUG if config["DEBUG"] else logging.INFO)
+        logging.info('Bot is')
+        token = config["SLACK_TOKEN"]
+        debug = config["DEBUG"]
 
-    bot = RtmBot(token)
-    site_plugins = []
-    files_currently_downloading = []
-    job_hash = {}
-
-    if config["DAEMON"]:
-        import daemon
-        with daemon.DaemonContext():
+        bot = RtmBot(token)
+        site_plugins = []
+        files_currently_downloading = []
+        job_hash = {}
+        print "before config daemon line 228"
+        if config["DAEMON"]:
+            print "config daemon is true line 230"
+            import daemon
+            with daemon.DaemonContext():
+                main_loop()
+        else:
+            print "config daemon is false like 235"
             main_loop()
-    else:
-        main_loop()
+    except:
+        import traceback
+        print traceback.format_exc()
