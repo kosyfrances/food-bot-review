@@ -1,1 +1,1 @@
-web: python ./rtmbot.py ${PORT}
+bot: python ./rtmbot.py
