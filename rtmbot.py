@@ -30,6 +30,7 @@ class RtmBot(object):
         self.connect()
         self.load_plugins()
         while True:
+            print "Bot start function"
             for reply in self.slack_client.rtm_read():
                 self.input(reply)
             self.crons()
@@ -171,6 +172,7 @@ class UnknownChannel(Exception):
 
 
 def main_loop():
+    print "Main loop function"
     if "LOGFILE" in config:
         logging.basicConfig(filename=config["LOGFILE"], level=logging.INFO,
                             format='%(asctime)s %(message)s')
@@ -195,6 +197,7 @@ def parse_args():
 
 
 if __name__ == "__main__":
+    print "Bot is started"
     from config import Config
 
     args = parse_args()
@@ -225,4 +228,5 @@ if __name__ == "__main__":
         import daemon
         with daemon.DaemonContext():
             main_loop()
-    main_loop()
+    else:
+        main_loop()
