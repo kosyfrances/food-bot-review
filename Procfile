@@ -1,1 +1,1 @@
-bot: python ./rtmbot.py
+worker: python ./rtmbot.py
