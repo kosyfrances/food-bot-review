@@ -30,7 +30,6 @@ class RtmBot(object):
         self.connect()
         self.load_plugins()
         while True:
-            print "Bot start function"
             for reply in self.slack_client.rtm_read():
                 self.input(reply)
             self.crons()
@@ -172,7 +171,6 @@ class UnknownChannel(Exception):
 
 
 def main_loop():
-    print "Main loop function"
     if "LOGFILE" in config:
         logging.basicConfig(filename=config["LOGFILE"], level=logging.INFO,
                             format='%(asctime)s %(message)s')
@@ -197,10 +195,8 @@ def parse_args():
 
 
 if __name__ == "__main__":
-    print "Bot is started line 200"
     try:
         from config import Config
-
         args = parse_args()
         directory = os.path.dirname(sys.argv[0])
         if not directory.startswith('/'):
@@ -208,12 +204,10 @@ if __name__ == "__main__":
                                                        directory
                                                        ))
         config = Config()
-        print "After config class is called line 210"
         if os.path.exists('./rtmbot.conf'):
             config.load_yaml(args.config or 'rtmbot.conf')
 
         else:
-            print "Get os envvars line 215"
             config.load_os_environ_vars('FB__')
 
         logging.basicConfig(stream=sys.stdout, filename='debug.log',
@@ -226,14 +220,12 @@ if __name__ == "__main__":
         site_plugins = []
         files_currently_downloading = []
         job_hash = {}
-        print "before config daemon line 228"
+
         if config["DAEMON"] in ['True', True]:
-            print "config daemon is true line 230"
             import daemon
             with daemon.DaemonContext():
                 main_loop()
         else:
-            print "config daemon is false like 235"
             main_loop()
     except:
         import traceback
