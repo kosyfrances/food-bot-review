@@ -227,7 +227,7 @@ if __name__ == "__main__":
         files_currently_downloading = []
         job_hash = {}
         print "before config daemon line 228"
-        if config["DAEMON"]:
+        if config["DAEMON"] in ['True', True]:
             print "config daemon is true line 230"
             import daemon
             with daemon.DaemonContext():
