@@ -210,9 +210,9 @@ if __name__ == "__main__":
     else:
         config.load_os_environ_vars('FB__')
 
-    logging.basicConfig(filename='debug.log',
+    logging.basicConfig(stream=sys.stdout, filename='debug.log',
                         level=logging.DEBUG if config["DEBUG"] else logging.INFO)
-    logging.info('Bot is stated')
+    logging.info('Bot is')
     token = config["SLACK_TOKEN"]
     debug = config["DEBUG"]
 
