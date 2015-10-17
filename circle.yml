@@ -7,3 +7,7 @@ deployment:
         branch: staging
         heroku:
             appname: staging-foodbot
+
+dependencies:
+  pre:
+    - pip install PIL --allow-external PIL --allow-unverified PIL
