@@ -1,6 +1,7 @@
 backports.ssl-match-hostname==3.4.0.2
 docutils==0.12
 lockfile==0.10.2
+psycopg2cffi-compat==1.1
 psycopg2==2.6.1
 python-daemon==2.0.5
 PyYAML==3.11
