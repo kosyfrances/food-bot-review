@@ -1,6 +1,6 @@
 machine:
   python:
-    version: pypy-2.3
+    version: pypy-2.3.1
 
 deployment:
     develop:
