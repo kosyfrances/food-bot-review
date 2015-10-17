@@ -65,22 +65,26 @@ def process_message(data):
     user_id = data['user']
 
     if buff[0].lower() == 'help':
-        outputs.append([channel, "`help` - Shows this screen."
-                       "\n"
-                        "\n`menu` - Get the menu for today."
+        outputs.append([channel, "```Shows help menu"
+                        "\n`help`"
                         "\n"
-                        "\n`menu [day of week]` - Get the menu for any day."
-                        "\n`Example: menu tuesday`"
+                        "\nGet the menu for today"
+                        "\n `menu`"
                         "\n"
-                        "\n`rate [meal] [option] [rating]`- Rate today's meal."
-                        "\n`Example: rate lunch A 10`"
-                        "\n Type `menu` to get the meal options."
+                        "\n Get the menu for any day"
+                        "\n`menu [day of week]`"
+                        "\nExample: menu tuesday"
                         "\n"
-                        "\n`comment [meal] [option] [comment]` - Tell me about the meal today."
-                        "\n `Example: comment breakfast B I enjoyed the meal.`"
-                        "\n Type `menu` to get the meal options."
+                        "\nRate today's meal"
+                        "\n`rate [meal] [option] [rating]`"
+                        "\nExample: rate lunch A 10"
                         "\n"
-                        "\n`get ratings` - Get the average food rating"
+                        "\nTell me about the meal today"
+                        "\n`comment [meal] [option] [comment]`"
+                        "\nExample: comment breakfast B I enjoyed the meal"
+                        "\n"
+                        "\nGet the average food rating"
+                        "\n`get ratings` ```"
                         ])
 
     elif buff[0].lower() == 'menu':
@@ -99,7 +103,7 @@ def process_message(data):
         # get_average_ratings(channel)
 
     else:
-        outputs.append([channel, "Wrong command yo! Type `help` to get `HELP`"])
+        outputs.append([channel, "```Wrong command yo! Type `help` to get `HELP` ```"])
 
 
 def get_day_of_week():
@@ -121,16 +125,25 @@ def show_menu(channel, buff):
         menu = sql.query(query_string, variables)
 
         if menu:
-            response = ""
+            response = "```"
+            food_time = ""
+            delimiter = ""
             for meal in menu:
-                response = response + str(meal[0]) + ' for ' + str(meal[1]) + ' as option ' + str(meal[2]) + '\t' + '\n\n'
-            outputs.append([channel, "Here is the menu.\n\n" + str(response)])
+                if food_time != str(meal[1]):
+                    response = response + delimiter + str(meal[1]).upper() + '\t' + '\n'
+                food_time = str(meal[1])
+                delimiter = '\t' + '\n'
+                response = response + "Option "+str(meal[2])+ ": "+ str(meal[0]) + '\t' + '\n'
+
+            outputs.append([channel, "Here is the menu." + str(response) + "```"])
 
     elif day in ['saturday', 'sunday']:
-        outputs.append([channel, "Sorry hungry person, no weekend meals. Use the vending machine. :stuck_out_tongue_winking_eye:"])
+        outputs.append([channel, "```Sorry hungry Andelan, no weekend meals. Use the vending machine.``` :stuck_out_tongue_winking_eye:"])
 
     else:
-        outputs.append([channel, "Hey, this is not a valid day of the week."])
+        outputs.append([channel, "```Hey, this is not a valid day of the week.```"])
+
+
 
 # def check_meal_option(meal, option, channel):
 #     if meal.lower() != 'breakfast' and meal.lower() != 'lunch':
@@ -178,4 +191,3 @@ def show_menu(channel, buff):
 
 # def get_average_ratings(channel):
 #     outputs.append([channel, "Get average rating was called...Code functionality in progress"])
-
