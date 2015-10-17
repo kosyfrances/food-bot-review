@@ -3,10 +3,10 @@ machine:
     version: pypy-2.3.1
 
 deployment:
-    develop:
-        branch: staging
+    production:
+        branch: master
         heroku:
-            appname: staging-foodbot
+            appname: slack-foodbot
 
 dependencies:
   override:
