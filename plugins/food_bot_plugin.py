@@ -65,26 +65,24 @@ def process_message(data):
     user_id = data['user']
 
     if buff[0].lower() == 'help':
-        outputs.append([channel, "```Shows help menu"
-                        "\n`help`"
+        outputs.append([channel, "```Shows help menu: help"
                         "\n"
-                        "\nGet the menu for today"
-                        "\n `menu`"
+                        "\nGet the menu for today: menu"
                         "\n"
-                        "\n Get the menu for any day"
-                        "\n`menu [day of week]`"
+                        "\nGet the menu for any day: menu [DAY_OF_WEEK]"
                         "\nExample: menu tuesday"
-                        "\n"
-                        "\nRate today's meal"
-                        "\n`rate [meal] [option] [rating]`"
-                        "\nExample: rate lunch A 10"
-                        "\n"
-                        "\nTell me about the meal today"
-                        "\n`comment [meal] [option] [comment]`"
-                        "\nExample: comment breakfast B I enjoyed the meal"
-                        "\n"
-                        "\nGet the average food rating"
-                        "\n`get ratings` ```"
+                        # "\n"
+                        # "\nRate today's meal"
+                        # "\n`rate [meal] [option] [rating]`"
+                        # "\nExample: rate lunch A 10"
+                        # "\n"
+                        # "\nTell me about the meal today"
+                        # "\n`comment [meal] [option] [comment]`"
+                        # "\nExample: comment breakfast B I enjoyed the meal"
+                        # "\n"
+                        # "\nGet the average food rating"
+                        # "\n`get ratings`
+                        "```"
                         ])
 
     elif buff[0].lower() == 'menu':
