@@ -9,5 +9,5 @@ deployment:
             appname: staging-foodbot
 
 dependencies:
-  pre:
-    - pip install PIL --allow-external PIL --allow-unverified PIL
+  override:
+    - pip install -r requirements.txt
