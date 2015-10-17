@@ -1,0 +1,9 @@
+machine:
+  python:
+    version: pypy-2.2.1
+
+deployment:
+    develop:
+        branch: staging
+        heroku:
+            appname: staging-foodbot
