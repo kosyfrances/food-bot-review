@@ -131,7 +131,7 @@ def show_menu(channel, buff):
                     response = response + delimiter + str(meal[1]).upper() + '\t' + '\n'
                 food_time = str(meal[1])
                 delimiter = '\t' + '\n'
-                response = response + "Option "+str(meal[2])+ ": "+ str(meal[0]) + '\t' + '\n'
+                response = response + "Option "+str(meal[2])+ ": "+ str(meal[0]).title().replace('And','and').replace('With','with') + '\t' + '\n'
 
             outputs.append([channel, "Here is the menu." + str(response) + "```"])
 
