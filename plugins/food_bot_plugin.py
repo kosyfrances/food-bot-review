@@ -6,7 +6,7 @@ import datetime
 outputs = []
 
 
-class CustomSQL(object):
+class CustomSQL:
     def __init__(self):
         self.cursor = ""
         self.conn = ""
@@ -63,8 +63,40 @@ def process_message(data):
     channel = data['channel']
     buff = str(data['text']).split(' ')
     user_id = data['user']
+    text_buffer = buff[0].lower()
+    response = Responses()
 
-    if buff[0].lower() == 'help':
+    if 'reply_to' in data and data['reply_to'] is None:
+        return
+
+    elif text_buffer == 'help':
+        response.show_help(channel, buff)
+
+    elif text_buffer == 'menu':
+        response.show_menu(channel, buff)
+
+    elif text_buffer == 'rate':
+        response.rate(channel, buff, user_id)
+
+    elif text_buffer == 'comment':
+        response.enter_comment(channel, buff)
+
+    elif text_buffer == 'get rating':
+        response.get_average_ratings(channel)
+
+    else:
+        outputs.append([channel, "```Wrong command yo! Type `help` to get `HELP` ```"])
+
+
+def get_day_of_week():
+    week_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday',
+                 'saturday', 'sunday']
+    return week_days[datetime.datetime.today().weekday()]
+
+
+class Responses:
+    @staticmethod
+    def show_help(channel, buff):
         outputs.append([channel, "```Shows help menu: help"
                         "\n"
                         "\nGet the menu for today: menu"
@@ -85,107 +117,90 @@ def process_message(data):
                         "```"
                         ])
 
-    elif buff[0].lower() == 'menu':
-        show_menu(channel, buff)
+    @staticmethod
+    def show_menu(channel, buff):
+        if len(buff) == 1:
+            day = get_day_of_week()
 
-    elif buff[0].lower() == 'rate':
-        print "rate was called"
-        # rate(channel, buff, user_id)
+        if len(buff) > 1:
+            day = buff[1].lower()
 
-    elif buff[0].lower() == 'comment':
-        print "comment was called"
-        # enter_comment(channel, buff)
+        if day in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']:
+            sql = CustomSQL()
+            variables = (day,)
+            query_string = "SELECT food, meal, option FROM food_menu WHERE day = (%s)"
+            menu = sql.query(query_string, variables)
 
-    elif buff[0].lower() == 'get rating':
-        print "get rating was called"
-        # get_average_ratings(channel)
+            if menu:
+                response = "```"
+                food_time = ""
+                delimiter = ""
+                for meal in menu:
+                    if food_time != str(meal[1]):
+                        response = response + delimiter + str(meal[1]).upper() + '\t' + '\n'
+                    food_time = str(meal[1])
+                    delimiter = '\t' + '\n'
+                    response = response + "Option "+str(meal[2])+ ": "+ str(meal[0]).title().replace('And','and').replace('With','with') + '\t' + '\n'
 
-    else:
-        outputs.append([channel, "```Wrong command yo! Type `help` to get `HELP` ```"])
+                outputs.append([channel, "Here is the menu." + str(response) + "```"])
 
+        elif day in ['saturday', 'sunday']:
+            outputs.append([channel, "```Sorry hungry Andelan, no weekend meals. Use the vending machine.``` :stuck_out_tongue_winking_eye:"])
 
-def get_day_of_week():
-    week_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday',
-                 'saturday', 'sunday']
-    return week_days[datetime.datetime.today().weekday()]
-
-def show_menu(channel, buff):
-    if len(buff) == 1:
-        day = get_day_of_week()
-
-    if len(buff) > 1:
-        day = buff[1].lower()
-
-    if day in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']:
-        sql = CustomSQL()
-        variables = (day,)
-        query_string = "SELECT food, meal, option FROM food_menu WHERE day = (%s)"
-        menu = sql.query(query_string, variables)
-
-        if menu:
-            response = "```"
-            food_time = ""
-            delimiter = ""
-            for meal in menu:
-                if food_time != str(meal[1]):
-                    response = response + delimiter + str(meal[1]).upper() + '\t' + '\n'
-                food_time = str(meal[1])
-                delimiter = '\t' + '\n'
-                response = response + "Option "+str(meal[2])+ ": "+ str(meal[0]).title().replace('And','and').replace('With','with') + '\t' + '\n'
-
-            outputs.append([channel, "Here is the menu." + str(response) + "```"])
-
-    elif day in ['saturday', 'sunday']:
-        outputs.append([channel, "```Sorry hungry Andelan, no weekend meals. Use the vending machine.``` :stuck_out_tongue_winking_eye:"])
-
-    else:
-        outputs.append([channel, "```Hey, this is not a valid day of the week.```"])
+        else:
+            outputs.append([channel, "```Hey, this is not a valid day of the week.```"])
 
 
 
-# def check_meal_option(meal, option, channel):
-#     if meal.lower() != 'breakfast' and meal.lower() != 'lunch':
-#         outputs.append([channel, "Sorry, valid meal selections are `breakfast` and `lunch` only. :)"])
+    # def check_meal_option(meal, option, channel):
+    #     if meal.lower() != 'breakfast' and meal.lower() != 'lunch':
+    #         outputs.append([channel, "Sorry, valid meal selections are `breakfast` and `lunch` only. :)"])
 
-#     elif option.lower() != 'a' and option.lower() != 'b':
-#         outputs.append([channel, "Sorry, valid option selections are `A` and `B` only. :)"])
+    #     elif option.lower() != 'a' and option.lower() != 'b':
+    #         outputs.append([channel, "Sorry, valid option selections are `A` and `B` only. :)"])
 
-# def rate(channel, buff, user_id):
-#     meal = buff[1]
-#     option = buff[2]
-#     rating = buff[3]
+    @staticmethod
+    def rate(channel, buff, user_id):
+        print "Rate functionality in progress"
+    #     meal = buff[1]
+    #     option = buff[2]
+    #     rating = buff[3]
 
-#     day_of_week = day_of_week_to_string(datetime.datetime.today().weekday())
+    #     day_of_week = day_of_week_to_string(datetime.datetime.today().weekday())
 
-#     #Get food menu id
-#     query_string = 'SELECT id_food_menu FROM food_bot_schema.food_menu where meal = "' + meal + '" and food_menu.meal_option = "' + option.upper() + '" and day_of_week = "' + day_of_week + '"'
-#     sql = CustomSQL()
-#     food_menu_id = sql.query(query_string)[0][0]
+    #     #Get food menu id
+    #     query_string = 'SELECT id_food_menu FROM food_bot_schema.food_menu where meal = "' + meal + '" and food_menu.meal_option = "' + option.upper() + '" and day_of_week = "' + day_of_week + '"'
+    #     sql = CustomSQL()
+    #     food_menu_id = sql.query(query_string)[0][0]
 
-#     check_meal_option(meal, option, channel)
+    #     check_meal_option(meal, option, channel)
 
-#     if str(rating).isdigit():
-#         query_string = 'insert into ratings (rating, comment, id_users, id_food_menu, date_served) values (' + str(rating) + ', NULL, "' + str(user_id) + '", ' + str(food_menu_id) + ', sysdate() )'
-#         sql.command(query_string)
-#         outputs.append([channel, "You have rated for this meal."])
-#     else:
-#         outputs.append([channel, "Your rating must be a number. Type `help` to get help."])
+    #     if str(rating).isdigit():
+    #         query_string = 'insert into ratings (rating, comment, id_users, id_food_menu, date_served) values (' + str(rating) + ', NULL, "' + str(user_id) + '", ' + str(food_menu_id) + ', sysdate() )'
+    #         sql.command(query_string)
+    #         outputs.append([channel, "You have rated for this meal."])
+    #     else:
+    #         outputs.append([channel, "Your rating must be a number. Type `help` to get help."])
 
-# def enter_comment(channel, buff):
-#     meal = buff[1]
-#     option = buff[2]
-#     comment = buff[3:]
+    @staticmethod
+    def enter_comment(channel, buff):
+        print "Comment functionality in progress"
+    #     meal = buff[1]
+    #     option = buff[2]
+    #     comment = buff[3:]
 
-#     check_meal_option(meal, option, channel)
+    #     check_meal_option(meal, option, channel)
 
-#     str_comment = ""
+    #     str_comment = ""
 
-#     for i in comment:
-#         str_comment = str_comment + i + ' '
+    #     for i in comment:
+    #         str_comment = str_comment + i + ' '
 
-#     str_comment = str_comment.rstrip(' ')
+    #     str_comment = str_comment.rstrip(' ')
 
-#     outputs.append([channel, "Code functionality in progress. Your comment is: " + str_comment])
+    #     outputs.append([channel, "Code functionality in progress. Your comment is: " + str_comment])
 
-# def get_average_ratings(channel):
-#     outputs.append([channel, "Get average rating was called...Code functionality in progress"])
+    @staticmethod
+    def get_average_ratings(channel):
+        print "Get average ratings functionality in progress"
+    #     outputs.append([channel, "Get average rating was called...Code functionality in progress"])

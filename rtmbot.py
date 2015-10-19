@@ -29,6 +29,7 @@ class RtmBot(object):
     def start(self):
         self.connect()
         self.load_plugins()
+
         while True:
             for reply in self.slack_client.rtm_read():
                 self.input(reply)
