@@ -69,29 +69,29 @@ def process_message(data):
         return
 
     elif text_buffer == 'help':
-        Responses.show_help(channel)
+        Response.show_help(channel)
 
     elif text_buffer == 'menu':
-        Responses.show_menu(channel, buff)
+        Response.show_menu(channel, buff)
 
     elif text_buffer == 'rate':
-        Responses.rate(channel, buff, user_id)
+        Response.rate(channel, buff, user_id)
 
     elif text_buffer == 'comment':
-        Responses.enter_comment(channel, buff)
+        Response.enter_comment(channel, buff)
 
     elif text_buffer == 'get-rating':
-        Responses.get_average_ratings(channel)
+        Response.get_average_ratings(channel)
 
     else:
-        Responses.show_error(channel)
+        Response.show_error(channel)
 
 
 def get_day_of_week():
     return datetime.datetime.now().strftime('%A').lower()
 
 
-class Responses:
+class Response:
 
     help_text = """
 ```Shows help menu: help
@@ -113,7 +113,7 @@ Example: menu tuesday```
 
     @staticmethod
     def show_help(channel):
-        outputs.append([channel, Responses.help_text])
+        outputs.append([channel, Response.help_text])
 
     @staticmethod
     def convert_menu_list_to_dict(menu):
@@ -127,7 +127,7 @@ Example: menu tuesday```
                 menu_dict[mealtime] = {}
             assert (option not in menu_dict[mealtime])
             menu_dict[mealtime][option] = food
-        print menu_dict
+
         return menu_dict
 
     @staticmethod
@@ -159,7 +159,7 @@ Example: menu tuesday```
             menu = sql.query(query_string, variables)
 
             if menu:
-                outputs.append([channel, Responses.format_menu_response(menu)])
+                outputs.append([channel, Response.format_menu_response(menu)])
 
 
         elif day in ['saturday', 'sunday']:
