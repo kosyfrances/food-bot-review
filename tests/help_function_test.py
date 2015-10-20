@@ -10,12 +10,12 @@ class TestHelpFunction(unittest.TestCase):
         self.outputs = food_bot_plugin.outputs
 
     def test_help_returns_correct_string(self):
-        Response.show_help(u'D0CLHTW20')
+        show_help = Response.show_help(u'D0CLHTW20')
 
         self.assertEqual(len(self.outputs), 1)
         self.assertEqual(type(self.outputs[0]), list)
         self.assertEqual(self.outputs[0][0], u'D0CLHTW20')
-        self.assertEqual(self.outputs[0][1], Response.help_text)
+        self.assertEqual(self.outputs[0][1], show_help)
 
     def test_help_response_goes_to_correct_channel(self):
         Response.show_help(u'E0C5HTW21')

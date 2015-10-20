@@ -1,6 +1,8 @@
 import psycopg2
 import urlparse
 import datetime
+from mako.template import Template
+from response_template import ResponseText
 
 # crontable = []
 outputs = []
@@ -93,27 +95,12 @@ def get_day_of_week():
 
 class Response:
 
-    help_text = """
-```Shows help menu: help
-Get the menu for today: menu
-Get the menu for any day: menu [DAY_OF_WEEK]
-Example: menu tuesday```
-"""
-# "\n"
-# "\nRate today's meal"
-# "\n`rate [meal] [option] [rating]`"
-# "\nExample: rate lunch A 10"
-# "\n"
-# "\nTell me about the meal today"
-# "\n`comment [meal] [option] [comment]`"
-# "\nExample: comment breakfast B I enjoyed the meal"
-# "\n"
-# "\nGet the average food rating"
-# "\n`get ratings`
-
     @staticmethod
     def show_help(channel):
-        outputs.append([channel, Response.help_text])
+        help_text_template = Template(ResponseText.help_response)
+        help_text = help_text_template.render()
+        outputs.append([channel, help_text])
+        return help_text
 
     @staticmethod
     def convert_menu_list_to_dict(menu):
@@ -144,9 +131,10 @@ Example: menu tuesday```
         meal_time.sort()
         response = "```"
         for meal in meal_time:
-            response += "\n{meal_time}\n".format(meal_time = meal.title())
+            response += "\n{meal_time}\n".format(meal_time=meal.title())
             for option in sorted_menu_dict[meal]:
-                response += "option {option} : {food}\n".format(option = option[0], food = option[1]).lower()
+                response += "option {option} : {food}\n".format(option=option[0],
+                                                                food=option[1]).lower()
         return "Here is the menu." + str(response) + "```"
 
     @staticmethod
