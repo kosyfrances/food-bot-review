@@ -3,7 +3,7 @@ from plugins.food_bot_plugin import Response
 
 
 def tokenize_script(script):
-    """strip out new lines and tabs from scripts"""
+    """Helper function to strip out new lines and tabs from scripts"""
     script_list = script.split('\n')
     return [s.strip() for s in script_list]
 
@@ -56,15 +56,17 @@ class TestShowMenu(unittest.TestCase):
     def test_format_menu_response_returns_the_correct_string(self):
         menu = self.sorted_menu
 
-        expected_string = """Here is the menu.```BREAKFAST
-            Option 1: Cereal and Bananas/Boiled Egg
-            Option 2: Apples and Bananas
-            Option 3: Bread with and Eggs
-            Option 4: Oats and Moi-Moi
+        expected_string = """Here is the menu.```
+                            Breakfast
+                            option 1 : cereal and bananas/boiled egg
+                            option 2 : apples and bananas
+                            option 3 : bread with and eggs
+                            option 4 : oats and moi-moi
 
-            LUNCH
-            Option 1: Macaroni with Sauteed Vegetables
-            Option 2: Coconut Rice and Coleslaw\t\n```"""
+                            Lunch
+                            option 1 : macaroni with sauteed vegetables
+                            option 2 : coconut rice and coleslaw
+                            ```"""
 
         tokenize_expected_input = tokenize_script(Response.format_menu_response(menu))
 
@@ -74,15 +76,17 @@ class TestShowMenu(unittest.TestCase):
     def test_format_menu_response_returns_correct_string_when_not_sorted(self):
         menu = self.unsorted_menu
 
-        expected_string = """Here is the menu.```BREAKFAST
-            Option 1: Cereal and Bananas/Boiled Egg
-            Option 2: Apples and Bananas
-            Option 3: Bread with and Eggs
-            Option 4: Oats and Moi-Moi
+        expected_string = """Here is the menu.```
+                            Breakfast
+                            option 1 : cereal and bananas/boiled egg
+                            option 2 : apples and bananas
+                            option 3 : bread with and eggs
+                            option 4 : oats and moi-moi
 
-            LUNCH
-            Option 1: Macaroni with Sauteed Vegetables
-            Option 2: Coconut Rice and Coleslaw\t\n```"""
+                            Lunch
+                            option 1 : macaroni with sauteed vegetables
+                            option 2 : coconut rice and coleslaw
+                            ```"""
 
         tokenize_expected_input = tokenize_script(Response.format_menu_response(menu))
 

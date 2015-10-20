@@ -122,26 +122,31 @@ Example: menu tuesday```
             food = meal[0]
             mealtime = meal[1]
             option = meal[2]
-
             if mealtime not in menu_dict:
                 menu_dict[mealtime] = {}
             assert (option not in menu_dict[mealtime])
             menu_dict[mealtime][option] = food
-
         return menu_dict
 
     @staticmethod
-    def format_menu_response(menu):
-        response = "```"
-        food_time = ""
-        delimiter = ""
-        for meal in menu:
-            if food_time != str(meal[1]):
-                response = response + delimiter + str(meal[1]).upper() + '\t' + '\n'
-            food_time = str(meal[1])
-            delimiter = '\t' + '\n'
-            response = response + "Option "+str(meal[2])+ ": "+ str(meal[0]).title().replace('And','and').replace('With','with') + '\t' + '\n'
+    def sort_menu_dict(menu_dict):
+        menu_dict_keys = menu_dict.keys()
+        sorted_menu_dict = {}
+        for key in menu_dict_keys:
+            sorted_menu_dict[key] = sorted(menu_dict[key].items())
+        return sorted_menu_dict
 
+    @staticmethod
+    def format_menu_response(menu):
+        unsorted_menu_dict = Response.convert_menu_list_to_dict(menu)
+        sorted_menu_dict = Response.sort_menu_dict(unsorted_menu_dict)
+        meal_time = sorted_menu_dict.keys()
+        meal_time.sort()
+        response = "```"
+        for meal in meal_time:
+            response += "\n{meal_time}\n".format(meal_time = meal.title())
+            for option in sorted_menu_dict[meal]:
+                response += "option {option} : {food}\n".format(option = option[0], food = option[1]).lower()
         return "Here is the menu." + str(response) + "```"
 
     @staticmethod
