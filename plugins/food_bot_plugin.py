@@ -116,6 +116,35 @@ Example: menu tuesday```
         outputs.append([channel, Responses.help_text])
 
     @staticmethod
+    def convert_menu_list_to_dict(menu):
+        menu_dict = {}
+        for meal in menu:
+            food = meal[0]
+            mealtime = meal[1]
+            option = meal[2]
+
+            if mealtime not in menu_dict:
+                menu_dict[mealtime] = {}
+            assert (option not in menu_dict[mealtime])
+            menu_dict[mealtime][option] = food
+        print menu_dict
+        return menu_dict
+
+    @staticmethod
+    def format_menu_response(menu):
+        response = "```"
+        food_time = ""
+        delimiter = ""
+        for meal in menu:
+            if food_time != str(meal[1]):
+                response = response + delimiter + str(meal[1]).upper() + '\t' + '\n'
+            food_time = str(meal[1])
+            delimiter = '\t' + '\n'
+            response = response + "Option "+str(meal[2])+ ": "+ str(meal[0]).title().replace('And','and').replace('With','with') + '\t' + '\n'
+
+        return "Here is the menu." + str(response) + "```"
+
+    @staticmethod
     def show_menu(channel, buff):
         if len(buff) == 1:
             day = get_day_of_week()
@@ -130,17 +159,8 @@ Example: menu tuesday```
             menu = sql.query(query_string, variables)
 
             if menu:
-                response = "```"
-                food_time = ""
-                delimiter = ""
-                for meal in menu:
-                    if food_time != str(meal[1]):
-                        response = response + delimiter + str(meal[1]).upper() + '\t' + '\n'
-                    food_time = str(meal[1])
-                    delimiter = '\t' + '\n'
-                    response = response + "Option "+str(meal[2])+ ": "+ str(meal[0]).title().replace('And','and').replace('With','with') + '\t' + '\n'
+                outputs.append([channel, Responses.format_menu_response(menu)])
 
-                outputs.append([channel, "Here is the menu." + str(response) + "```"])
 
         elif day in ['saturday', 'sunday']:
             outputs.append([channel, "```Sorry hungry Andelan, no weekend meals. Use the vending machine.``` :stuck_out_tongue_winking_eye:"])
