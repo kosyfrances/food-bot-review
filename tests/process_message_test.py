@@ -10,7 +10,7 @@ class TestProcessMessage(unittest.TestCase):
         self.data['channel'] = u'D0CLHTW20'
         self.data['user'] = u'U0774N56J'
 
-    @mock.patch('plugins.food_bot_plugin.Responses')
+    @mock.patch('plugins.food_bot_plugin.Response')
     def test_show_help_was_called(self, mock_response):
         data = self.data
         data['text'] = u'help'
@@ -24,7 +24,7 @@ class TestProcessMessage(unittest.TestCase):
         self.assertFalse(mock_response.get_average_ratings.called)
         self.assertFalse(mock_response.show_error.called)
 
-    @mock.patch('plugins.food_bot_plugin.Responses')
+    @mock.patch('plugins.food_bot_plugin.Response')
     def test_show_menu_was_called(self, mock_response):
         data = self.data
         data['text'] = u'menu'
@@ -38,7 +38,7 @@ class TestProcessMessage(unittest.TestCase):
         self.assertFalse(mock_response.get_average_ratings.called)
         self.assertFalse(mock_response.show_error.called)
 
-    @mock.patch('plugins.food_bot_plugin.Responses')
+    @mock.patch('plugins.food_bot_plugin.Response')
     def test_rate_was_called(self, mock_response):
         data = self.data
         data['text'] = u'rate'
@@ -52,7 +52,7 @@ class TestProcessMessage(unittest.TestCase):
         self.assertFalse(mock_response.get_average_ratings.called)
         self.assertFalse(mock_response.show_error.called)
 
-    @mock.patch('plugins.food_bot_plugin.Responses')
+    @mock.patch('plugins.food_bot_plugin.Response')
     def test_comment_was_called(self, mock_response):
         data = self.data
         data['text'] = u'comment'
@@ -66,7 +66,7 @@ class TestProcessMessage(unittest.TestCase):
         self.assertFalse(mock_response.get_average_ratings.called)
         self.assertFalse(mock_response.show_error.called)
 
-    @mock.patch('plugins.food_bot_plugin.Responses')
+    @mock.patch('plugins.food_bot_plugin.Response')
     def test_get_rating_was_called(self, mock_response):
         data = self.data
         data['text'] = u'get-rating'
@@ -80,7 +80,7 @@ class TestProcessMessage(unittest.TestCase):
         self.assertFalse(mock_response.enter_comment.called)
         self.assertFalse(mock_response.show_error.called)
 
-    @mock.patch('plugins.food_bot_plugin.Responses')
+    @mock.patch('plugins.food_bot_plugin.Response')
     def test_show_error_was_called_with_wrong_command(self, mock_response):
         data = self.data
         data['text'] = u'asdf'
