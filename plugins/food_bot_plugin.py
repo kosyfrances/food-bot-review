@@ -17,6 +17,9 @@ def send_response(template_name, channel, context=None):
 
 
 def process_message(data):
+    if 'subtype' in data:
+        return
+
     channel = data['channel']
     buff = str(data['text']).split(' ')
     user_id = data['user']
