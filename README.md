@@ -42,11 +42,12 @@ createdb food_bot
 ```
 **Create tables:**
 ```
-CREATE TABLE meal(id SERIAL PRIMARY KEY,
+CREATE TABLE menu_table (id SERIAL PRIMARY KEY,
                    day VARCHAR(10) NOT NULL,
                    food VARCHAR(60) NOT NULL,
                    meal VARCHAR(10) NOT NULL,
-                   option CHAR(1) NOT NULL
+                   option CHAR(1) NOT NULL,
+                   week CHAR(1) NOT NULL
                  );
 
 create table rating(id SERIAL PRIMARY KEY,
