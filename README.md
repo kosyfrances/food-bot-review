@@ -50,10 +50,10 @@ CREATE TABLE menu_table (id SERIAL PRIMARY KEY,
                    week CHAR(1) NOT NULL
                  );
 
-create table rating(id SERIAL PRIMARY KEY,
+CREATE TABLE rating (id SERIAL PRIMARY KEY,
                     date DATE NOT NULL,
                     user_id VARCHAR(20),
-                    meal_id INT REFERENCES meal(id),
+                    menu_id INT REFERENCES menu_table(id),
                     rate INT NOT NULL,
                     comment TEXT
                    );
