@@ -1,0 +1,17 @@
+```Shows help menu: help
+Get the menu for today: menu
+Get the menu for any day: menu [DAY_OF_WEEK]
+Example: menu tuesday```
+
+
+## "\n"
+## "\nRate today's meal"
+## "\n`rate [meal] [option] [rating]`"
+## "\nExample: rate lunch A 10"
+## "\n"
+## "\nTell me about the meal today"
+## "\n`comment [meal] [option] [comment]`"
+## "\nExample: comment breakfast B I enjoyed the meal"
+## "\n"
+## "\nGet the average food rating"
+## "\n`get ratings`

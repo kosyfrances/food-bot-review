@@ -1,0 +1,9 @@
+Here is the menu.```
+% for mealtime in sorted(menu.keys()):
+${mealtime.title()}
+    %for option in sorted(menu[mealtime].keys()):
+option ${option} : ${menu[mealtime][option]}
+    %endfor
+
+% endfor
+```

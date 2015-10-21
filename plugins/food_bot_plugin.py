@@ -1,65 +1,25 @@
-import psycopg2
-import urlparse
-import datetime
+from custom_sql import CustomSQL
+from mako.template import Template
 
 # crontable = []
 outputs = []
 
 
-class CustomSQL:
-    def __init__(self):
-        self.cursor = ""
-        self.conn = ""
+def send_response(template_name, channel, context=None):
+    import os
 
-    def connect(self):
-        from config import Config
-        config = Config()
-
-        if config["ENVIRONMENT"] == 'production':
-            urlparse.uses_netloc.append("postgres")
-            url = urlparse.urlparse(config["DATABASE_URL"])
-            self.conn = psycopg2.connect(
-                database=url.path[1:],
-                user=url.username,
-                password=url.password,
-                host=url.hostname,
-                port=url.port
-            )
-
-        else:
-            conn_string = "host='localhost' dbname='food_bot'"
-
-            print "Connecting to database\n ->%s" % (conn_string)
-
-            self.conn = psycopg2.connect(conn_string)
-
-        # conn.cursor will return a cursor object
-        # you can use this cursor to perform queries
-        self.cursor = self.conn.cursor()
-        print "Connected!\n"
-
-    def disconnect(self):
-        print "Closing connection!\n"
-        self.conn.close()
-
-    # def command(self, query_string):
-    #     self.connect()
-    #     self.cursor.execute(query_string)
-    #     self.cursor.execute('commit')
-    #     self.disconnect()
-
-    def query(self, query_string, variables):
-        self.connect()
-        self.cursor.execute(query_string, variables)
-        result = []
-        for row in self.cursor:
-            result.append(row)
-
-        self.disconnect()
-        return result
+    context = context or {}
+    template_path = os.path.join('templates', template_name) + '.txt'
+    template = Template(filename=template_path)
+    rendered_template = template.render(**context)
+    outputs.append([channel, rendered_template])
+    return rendered_template
 
 
 def process_message(data):
+    if 'subtype' in data:
+        return
+
     channel = data['channel']
     buff = str(data['text']).split(' ')
     user_id = data['user']
@@ -69,51 +29,47 @@ def process_message(data):
         return
 
     elif text_buffer == 'help':
-        Responses.show_help(channel)
+        Response.show_help(channel)
 
     elif text_buffer == 'menu':
-        Responses.show_menu(channel, buff)
+        Response.show_menu(channel, buff)
 
     elif text_buffer == 'rate':
-        Responses.rate(channel, buff, user_id)
+        Response.rate(channel, buff, user_id)
 
     elif text_buffer == 'comment':
-        Responses.enter_comment(channel, buff)
+        Response.enter_comment(channel, buff)
 
     elif text_buffer == 'get-rating':
-        Responses.get_average_ratings(channel)
+        Response.get_average_ratings(channel)
 
     else:
-        Responses.show_error(channel)
+        Response.show_error(channel)
 
 
 def get_day_of_week():
+    import datetime
     return datetime.datetime.now().strftime('%A').lower()
 
 
-class Responses:
-
-    help_text = """
-```Shows help menu: help
-Get the menu for today: menu
-Get the menu for any day: menu [DAY_OF_WEEK]
-Example: menu tuesday```
-"""
-# "\n"
-# "\nRate today's meal"
-# "\n`rate [meal] [option] [rating]`"
-# "\nExample: rate lunch A 10"
-# "\n"
-# "\nTell me about the meal today"
-# "\n`comment [meal] [option] [comment]`"
-# "\nExample: comment breakfast B I enjoyed the meal"
-# "\n"
-# "\nGet the average food rating"
-# "\n`get ratings`
+class Response:
 
     @staticmethod
     def show_help(channel):
-        outputs.append([channel, Responses.help_text])
+        return send_response('help_response', channel)
+
+    @staticmethod
+    def convert_menu_list_to_dict(menu):
+        menu_dict = {}
+        for meal in menu:
+            food = meal[0]
+            mealtime = meal[1]
+            option = meal[2]
+            if mealtime not in menu_dict:
+                menu_dict[mealtime] = {}
+            assert (option not in menu_dict[mealtime])
+            menu_dict[mealtime][option] = food
+        return menu_dict
 
     @staticmethod
     def show_menu(channel, buff):
@@ -130,24 +86,14 @@ Example: menu tuesday```
             menu = sql.query(query_string, variables)
 
             if menu:
-                response = "```"
-                food_time = ""
-                delimiter = ""
-                for meal in menu:
-                    if food_time != str(meal[1]):
-                        response = response + delimiter + str(meal[1]).upper() + '\t' + '\n'
-                    food_time = str(meal[1])
-                    delimiter = '\t' + '\n'
-                    response = response + "Option "+str(meal[2])+ ": "+ str(meal[0]).title().replace('And','and').replace('With','with') + '\t' + '\n'
-
-                outputs.append([channel, "Here is the menu." + str(response) + "```"])
+                menu_dict = Response.convert_menu_list_to_dict(menu)
+                send_response('menu_response', channel, {'menu': menu_dict})
 
         elif day in ['saturday', 'sunday']:
-            outputs.append([channel, "```Sorry hungry Andelan, no weekend meals. Use the vending machine.``` :stuck_out_tongue_winking_eye:"])
+            send_response('weekend_meal_error', channel)
 
         else:
-            outputs.append([channel, "```Hey, this is not a valid day of the week.```"])
-
+            send_response('invalid_day_error', channel)
 
 
     # def check_meal_option(meal, option, channel):
