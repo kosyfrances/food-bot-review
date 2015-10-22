@@ -56,6 +56,7 @@ class RtmBot(object):
     def output(self):
         for plugin in self.bot_plugins:
             limiter = False
+
             for output in plugin.do_output():
                 channel = self.slack_client.server.channels.find(output[0])
                 if channel != None and output[1] != None:
