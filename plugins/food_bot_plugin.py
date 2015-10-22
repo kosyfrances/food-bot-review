@@ -74,6 +74,7 @@ class Response:
 
     @staticmethod
     def show_menu(channel, buff):
+        import datetime
         if len(buff) == 1:
             day = get_day_of_week()
 
@@ -82,8 +83,13 @@ class Response:
 
         if day in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']:
             sql = CustomSQL()
-            variables = (day,)
-            query_string = "SELECT food, meal, option FROM food_menu WHERE day = (%s)"
+            week = (datetime.datetime.now().isocalendar()[1] % 2) + 1
+
+            # if week == 0:
+            #     week = 2
+
+            variables = (day, str(week),)
+            query_string = "SELECT food, meal, option FROM menu_table WHERE day = (%s) AND week = (%s)"
             menu = sql.query(query_string, variables)
 
             if menu:
@@ -152,4 +158,4 @@ class Response:
 
     @staticmethod
     def show_error(channel):
-        outputs.append([channel, "```Wrong command yo! Type `help` to get `HELP` ```"])
+        send_response('wrong_command', channel)
