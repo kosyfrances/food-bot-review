@@ -17,34 +17,35 @@ def send_response(template_name, channel, context=None):
 
 
 def process_message(data):
-    if 'subtype' in data:
-        return
+    if data['channel'].startswith("D"):
+        if 'subtype' in data:
+            return
 
-    channel = data['channel']
-    buff = str(data['text']).split(' ')
-    user_id = data['user']
-    text_buffer = buff[0].lower()
+        channel = data['channel']
+        buff = str(data['text']).split(' ')
+        user_id = data['user']
+        text_buffer = buff[0].lower()
 
-    if 'reply_to' in data and data['reply_to'] is None:
-        return
+        if 'reply_to' in data and data['reply_to'] is None:
+            return
 
-    elif text_buffer == 'help':
-        Response.show_help(channel)
+        elif text_buffer == 'help':
+            Response.show_help(channel)
 
-    elif text_buffer == 'menu':
-        Response.show_menu(channel, buff)
+        elif text_buffer == 'menu':
+            Response.show_menu(channel, buff)
 
-    elif text_buffer == 'rate':
-        Response.rate(channel, buff, user_id)
+        elif text_buffer == 'rate':
+            Response.rate(channel, buff, user_id)
 
-    elif text_buffer == 'comment':
-        Response.enter_comment(channel, buff)
+        elif text_buffer == 'comment':
+            Response.enter_comment(channel, buff)
 
-    elif text_buffer == 'get-rating':
-        Response.get_average_ratings(channel)
+        elif text_buffer == 'get-rating':
+            Response.get_average_ratings(channel)
 
-    else:
-        Response.show_error(channel)
+        else:
+            Response.show_error(channel)
 
 
 def get_day_of_week():
