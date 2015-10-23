@@ -60,19 +60,19 @@ CREATE TABLE rating (id SERIAL PRIMARY KEY,
 ```
 **Download the database backup from heroku:**
 ```
-heroku pg:backups capture --app APP
+heroku pg:backups capture --app APPNAME
 ```
-**Be sure to replace APP with the app name on staging**
+**Be sure to replace APPNAME with the app name of app on staging**
 
 Next,
 ```
- curl -o latest.dump `heroku pg:backups public-url`
+ curl -o latest.dump `heroku pg:backups --app APPNAME public-url`
 ```
 **Restore to local database**
 ```
-pg_restore --verbose --clean --no-acl --no-owner -h localhost -U myuser -d mydb latest.dump
+pg_restore --verbose --clean --no-acl --no-owner -h localhost -U MYUSER -d food_bot latest.dump
 ```
-**Be sure to replace _myuser_ with your postgres username.**
+**Be sure to replace MYUSER with your postgres username.**
 
 You can click [here](https://devcenter.heroku.com/articles/heroku-postgres-import-export) to read more about importing databases from heroku
 
@@ -86,11 +86,11 @@ You can click [here](https://devcenter.heroku.com/articles/heroku-postgres-impor
 
 **Tables** -  meal, rating
 
-Rating has a one to one relationship to Meal via the meal_id.
+Rating has a many to one relationship to Meal via the meal_id.
 
 **Structure of the meal table:**
 
-id | day | food | meal | option
+id | day | food | meal | option | week
 
 **Structure of the rating table:**
 
@@ -133,5 +133,5 @@ $(FEATURE_BRANCH): git rebase origin/master
 $(FEATURE_BRANCH): git push
 ```
 - You will need to git push --force if the rebase rewrote any commits, but first confirm with git status that you're on the correct branch.
-- Create pull request when you are done for code review.
+- Create pull request against the STAGING branch when you are done for code review.
 - After review, your code-reviewer will merge your branch to staging branch, and if there are no issues, the pull request will be merged and branch will be deleted.
