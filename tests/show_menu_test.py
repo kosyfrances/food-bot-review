@@ -1,5 +1,7 @@
 import unittest
+from mock import patch
 from plugins.food_bot_plugin import Response
+from custom_sql import CustomSQL
 
 
 def tokenize_script(script):
@@ -54,42 +56,31 @@ class TestShowMenu(unittest.TestCase):
         compare_menu_dict(unsorted_menu_dict, expected_dict)
         compare_menu_dict(expected_dict, unsorted_menu_dict)
 
-    # def test_format_menu_response_returns_the_correct_string(self):
-    #     menu = self.sorted_menu
+    @patch.object(Response, 'convert_menu_list_to_dict',
+                  return_value="menu list as dict")
+    @patch.object(CustomSQL, 'query', return_value="custom sql query")
+    @patch('plugins.food_bot_plugin.get_day_of_week', return_value="monday")
+    @patch('plugins.food_bot_plugin.get_week_number', return_value="1")
+    def test_correct_template_name_and_context(self, *args):
+        invalid_day_response_dict = Response.get_menu_template_context(['menu',
+                                                                       'asdf'])
+        weekend_response_dict = Response.get_menu_template_context(['menu',
+                                                                   'saturday'])
+        weekend_response_dict2 = Response.get_menu_template_context(['menu',
+                                                                    'SUNDAY'])
+        weekday_response_dict = Response.get_menu_template_context(['menu',
+                                                                   'tuesday'])
+        menu_response_dict = Response.get_menu_template_context(['menu'])
 
-    #     expected_string = u"""Here is the menu.```
-    #                         Breakfast
-    #                         option 1 : cereal and bananas/boiled egg
-    #                         option 2 : apples and bananas
-    #                         option 3 : bread with and eggs
-    #                         option 4 : oats and moi-moi
+        self.assertEqual(invalid_day_response_dict,
+                         {'template': 'invalid_day_error', 'context': {}})
+        self.assertEqual(weekend_response_dict,
+                         {'template': 'weekend_meal_error', 'context': {}})
+        self.assertEqual(weekend_response_dict2,
+                         {'template': 'weekend_meal_error', 'context': {}})
+        self.assertEqual(weekday_response_dict, {'template': 'menu_response',
+                         'context': {'menu': "menu list as dict"}})
+        self.assertEqual(menu_response_dict, {'template': 'menu_response',
+                         'context': {'menu': "menu list as dict"}})
 
-    #                         Lunch
-    #                         option 1 : macaroni with sauteed vegetables
-    #                         option 2 : coconut rice and coleslaw
-    #                         ```"""
-
-    #     tokenize_expected_input = tokenize_script(Response.format_menu_response(menu))
-
-    #     self.assertEqual(type(Response.format_menu_response(menu)), type(expected_string))
-    #     self.assertEqual(tokenize_expected_input, tokenize_script(expected_string))
-
-    # def test_format_menu_response_returns_correct_string_when_not_sorted(self):
-    #     menu = self.unsorted_menu
-
-    #     expected_string = u"""Here is the menu.```
-    #                         Breakfast
-    #                         option 1 : cereal and bananas/boiled egg
-    #                         option 2 : apples and bananas
-    #                         option 3 : bread with and eggs
-    #                         option 4 : oats and moi-moi
-
-    #                         Lunch
-    #                         option 1 : macaroni with sauteed vegetables
-    #                         option 2 : coconut rice and coleslaw
-    #                         ```"""
-
-    #     tokenize_expected_input = tokenize_script(Response.format_menu_response(menu))
-
-    #     self.assertEqual(type(Response.format_menu_response(menu)), type(expected_string))
-    #     self.assertEqual(tokenize_expected_input, tokenize_script(expected_string))
+        CustomSQL.query.assert_called_with("SELECT food, meal, option FROM menu_table WHERE day = (%s) AND week = (%s)",("monday", '1'))
