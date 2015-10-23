@@ -1,5 +1,6 @@
-from custom_sql import CustomSQL
+import datetime
 from mako.template import Template
+from custom_sql import CustomSQL
 
 # crontable = []
 outputs = []
@@ -49,8 +50,15 @@ def process_message(data):
 
 
 def get_day_of_week():
-    import datetime
     return datetime.datetime.now().strftime('%A').lower()
+
+
+def get_week_number():
+    week = (datetime.datetime.now().isocalendar()[1] % 2) + 1
+    # fall back code here
+    # if week == 0:
+    #     week = 2
+    return week
 
 
 class Response:
@@ -73,8 +81,10 @@ class Response:
         return menu_dict
 
     @staticmethod
-    def show_menu(channel, buff):
-        import datetime
+    def get_menu_template_context(buff):
+        """
+        return the template name and correct context
+        """
         if len(buff) == 1:
             day = get_day_of_week()
 
@@ -83,10 +93,7 @@ class Response:
 
         if day in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']:
             sql = CustomSQL()
-            week = (datetime.datetime.now().isocalendar()[1] % 2) + 1
-
-            # if week == 0:
-            #     week = 2
+            week = get_week_number()
 
             variables = (day, str(week),)
             query_string = "SELECT food, meal, option FROM menu_table WHERE day = (%s) AND week = (%s)"
@@ -94,13 +101,21 @@ class Response:
 
             if menu:
                 menu_dict = Response.convert_menu_list_to_dict(menu)
-                send_response('menu_response', channel, {'menu': menu_dict})
+                return {'template': 'menu_response',
+                        'context': {'menu': menu_dict}}
 
         elif day in ['saturday', 'sunday']:
-            send_response('weekend_meal_error', channel)
+            return {'template': 'weekend_meal_error', 'context': {}}
 
         else:
-            send_response('invalid_day_error', channel)
+            return {'template': 'invalid_day_error', 'context': {}}
+
+    @staticmethod
+    def show_menu(channel, buff):
+        show_menu_dict = Response.get_menu_template_context(buff)
+        send_response(show_menu_dict['template'], channel,
+                      show_menu_dict['context'])
+
 
 
     # def check_meal_option(meal, option, channel):
