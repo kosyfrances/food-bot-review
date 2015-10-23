@@ -7,7 +7,3 @@ deployment:
         branch: master
         heroku:
             appname: slack-foodbot
-
-dependencies:
-  override:
-    - pip install -r requirements.txt
