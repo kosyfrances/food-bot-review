@@ -61,6 +61,29 @@ def get_week_number():
     return week
 
 
+def check_meal_selected(meal, channel):
+    if meal.lower() != 'breakfast' and meal.lower() != 'lunch':
+        send_response('invalid_meal', channel)
+        return False
+    else:
+        return True
+
+def check_option_selected(option, channel, day):
+    week = get_week_number()
+    variables = ('breakfast', 'monday', week,)
+    sql = CustomSQL()
+
+    query_string = "SELECT count(option) FROM menu_table WHERE meal = (%s) AND day = (%s) AND week = (%s)"
+    option_count_sql = sql.query(query_string, variables)
+    option_count = int(option_count_sql[0][0])
+
+    if int(option) > option_count:
+        send_response('invalid_option', channel, {'option_count': option_count})
+        return False
+    else:
+        return True
+
+
 class Response:
 
     @staticmethod
@@ -95,7 +118,7 @@ class Response:
             sql = CustomSQL()
             week = get_week_number()
 
-            variables = (day, str(week),)
+            variables = (day, week,)
             query_string = "SELECT food, meal, option FROM menu_table WHERE day = (%s) AND week = (%s)"
             menu = sql.query(query_string, variables)
 
@@ -117,6 +140,14 @@ class Response:
                       show_menu_dict['context'])
 
 
+# def check_option_selected(option):
+#     check that the option is correct
+
+# def check_rating(rate):
+#     check that the person rating does not exceed the max number we want
+
+
+
 
     # def check_meal_option(meal, option, channel):
     #     if meal.lower() != 'breakfast' and meal.lower() != 'lunch':
@@ -127,10 +158,22 @@ class Response:
 
     @staticmethod
     def rate(channel, buff, user_id):
-        print "Rate functionality in progress"
-    #     meal = buff[1]
-    #     option = buff[2]
-    #     rating = buff[3]
+        day = get_day_of_week()
+        # if day in ['saturday', 'sunday']:
+        #     send_response('weekend_meal_error', channel)
+
+        # else:
+        meal = buff[1]
+        option = buff[2]
+        rating = buff[3]
+
+        if check_meal_selected(meal, channel) is False:
+            return
+
+        if check_option_selected(option, channel, day) is False:
+            return
+
+
 
     #     day_of_week = day_of_week_to_string(datetime.datetime.today().weekday())
 

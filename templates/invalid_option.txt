@@ -1,0 +1,9 @@
+
+<% val = "Sorry, valid " %>
+% if option_count == 1:
+    <% val = val + "option is 1" %>
+% else:
+    <% val = val + "options are between 1 and {count}".format(count=option_count) %>
+% endif
+<% val = val + " only." %>
+```${val}```
