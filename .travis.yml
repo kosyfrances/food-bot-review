@@ -7,6 +7,6 @@ install:
   - pip install coveralls
 # command to run tests
 script:
-  coverage run --source=food-bot-review/plugins test tests "*_test.py"
+  coverage run --source=food-bot-review/plugins test "*_test.py"
 after_success:
   coveralls
