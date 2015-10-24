@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/andela-kanyanwu/food-bot-review/badge.svg?branch=feature_coveralls_integration&service=github)](https://coveralls.io/github/andela-kanyanwu/food-bot-review?branch=feature_coveralls_integration)
+
 # Food-bot-review
 
 Food-bot is used for getting real-time feedback about meals served within the Andela community. It also lets you know which meal will be served when you want it to.
