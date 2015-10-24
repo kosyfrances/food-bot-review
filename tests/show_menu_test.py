@@ -4,13 +4,6 @@ from plugins.food_bot_plugin import Response
 from custom_sql import CustomSQL
 
 
-def tokenize_script(script):
-    """Helper function to strip out new lines and tabs from scripts"""
-    script_list = script.split('\n')
-    strip_script = [s.strip() for s in script_list]
-    return [s for s in strip_script if s]
-
-
 class TestShowMenu(unittest.TestCase):
 
     def setUp(self):

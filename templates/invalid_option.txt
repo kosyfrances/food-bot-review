@@ -1,4 +1,3 @@
-
 <% val = "Sorry, valid " %>
 % if option_count == 1:
     <% val = val + "option is 1" %>

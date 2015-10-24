@@ -64,9 +64,10 @@ def get_week_number():
 def check_meal_selected(meal, channel):
     if meal.lower() != 'breakfast' and meal.lower() != 'lunch':
         send_response('invalid_meal', channel)
-        return False
+        return {'bool': False, 'template': 'invalid_meal'}
     else:
-        return True
+        return {'bool': True}
+
 
 def check_option_selected(option, channel, day):
     week = get_week_number()
@@ -79,9 +80,9 @@ def check_option_selected(option, channel, day):
 
     if int(option) > option_count:
         send_response('invalid_option', channel, {'option_count': option_count})
-        return False
+        return {'bool': False, 'template': 'invalid_option'}
     else:
-        return True
+        return {'bool': True}
 
 
 class Response:
@@ -139,23 +140,6 @@ class Response:
         send_response(show_menu_dict['template'], channel,
                       show_menu_dict['context'])
 
-
-# def check_option_selected(option):
-#     check that the option is correct
-
-# def check_rating(rate):
-#     check that the person rating does not exceed the max number we want
-
-
-
-
-    # def check_meal_option(meal, option, channel):
-    #     if meal.lower() != 'breakfast' and meal.lower() != 'lunch':
-    #         outputs.append([channel, "Sorry, valid meal selections are `breakfast` and `lunch` only. :)"])
-
-    #     elif option.lower() != 'a' and option.lower() != 'b':
-    #         outputs.append([channel, "Sorry, valid option selections are `A` and `B` only. :)"])
-
     @staticmethod
     def rate(channel, buff, user_id):
         day = get_day_of_week()
@@ -167,7 +151,7 @@ class Response:
         option = buff[2]
         rating = buff[3]
 
-        if check_meal_selected(meal, channel) is False:
+        if check_meal_selected(meal, channel)['bool'] is False:
             return
 
         if check_option_selected(option, channel, day) is False:
