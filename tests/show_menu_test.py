@@ -1,6 +1,6 @@
 import unittest
 from mock import patch
-from plugins.food_bot_plugin import Response
+from plugins.food_bot_plugin import Response, Helper
 from custom_sql import CustomSQL
 
 
@@ -34,8 +34,8 @@ class TestShowMenu(unittest.TestCase):
                 '2': 'coconut rice and coleslaw'
             }
         }
-        sorted_menu_dict = Response.convert_menu_list_to_dict(self.sorted_menu)
-        unsorted_menu_dict = Response.convert_menu_list_to_dict(self.unsorted_menu)
+        sorted_menu_dict = Helper.convert_menu_list_to_dict(self.sorted_menu)
+        unsorted_menu_dict = Helper.convert_menu_list_to_dict(self.unsorted_menu)
 
         def compare_menu_dict(menu_dict1, menu_dict2):
             for meal_time in menu_dict1:
@@ -49,21 +49,21 @@ class TestShowMenu(unittest.TestCase):
         compare_menu_dict(unsorted_menu_dict, expected_dict)
         compare_menu_dict(expected_dict, unsorted_menu_dict)
 
-    @patch.object(Response, 'convert_menu_list_to_dict',
+    @patch.object(Helper, 'convert_menu_list_to_dict',
                   return_value="menu list as dict")
     @patch.object(CustomSQL, 'query', return_value="custom sql query")
-    @patch('plugins.food_bot_plugin.get_day_of_week', return_value="monday")
-    @patch('plugins.food_bot_plugin.get_week_number', return_value="1")
+    @patch.object(Helper, 'get_day_of_week', return_value="monday")
+    @patch.object(Helper, 'get_week_number', return_value="1")
     def test_correct_template_name_and_context(self, *args):
-        invalid_day_response_dict = Response.get_menu_template_context(['menu',
+        invalid_day_response_dict = Helper.get_menu_template_context(['menu',
                                                                        'asdf'])
-        weekend_response_dict = Response.get_menu_template_context(['menu',
+        weekend_response_dict = Helper.get_menu_template_context(['menu',
                                                                    'saturday'])
-        weekend_response_dict2 = Response.get_menu_template_context(['menu',
+        weekend_response_dict2 = Helper.get_menu_template_context(['menu',
                                                                     'SUNDAY'])
-        weekday_response_dict = Response.get_menu_template_context(['menu',
+        weekday_response_dict = Helper.get_menu_template_context(['menu',
                                                                    'tuesday'])
-        menu_response_dict = Response.get_menu_template_context(['menu'])
+        menu_response_dict = Helper.get_menu_template_context(['menu'])
 
         self.assertEqual(invalid_day_response_dict,
                          {'template': 'invalid_day_error', 'context': {}})
