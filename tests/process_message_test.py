@@ -41,7 +41,7 @@ class TestProcessMessage(unittest.TestCase):
     @mock.patch('plugins.food_bot_plugin.Response')
     def test_rate_was_called(self, mock_response):
         data = self.data
-        data['text'] = u'rate'
+        data['text'] = u'rate breakfast 2 3'
 
         process_message(data)
 
