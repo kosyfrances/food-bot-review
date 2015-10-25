@@ -39,9 +39,6 @@ def process_message(data):
         elif text_buffer == 'rate':
             Response.rate(channel, buff, user_id)
 
-        elif text_buffer == 'comment':
-            Response.enter_comment(channel, buff)
-
         elif text_buffer == 'get-rating':
             Response.get_average_ratings(channel)
 
@@ -51,6 +48,7 @@ def process_message(data):
 
 def get_day_of_week():
     return datetime.datetime.now().strftime('%A').lower()
+
 
 def get_date():
     return datetime.datetime.now().strftime("%A %b %d %Y")
@@ -64,39 +62,38 @@ def get_week_number():
     return week
 
 
-def check_meal_selected(meal, channel):
+def check_meal_selected(meal):
     if meal.lower() != 'breakfast' and meal.lower() != 'lunch':
-        send_response('invalid_meal', channel)
-        return {'bool': False, 'template': 'invalid_meal'}
+        return {'bool': False}
     else:
-        return {'bool': True}
+        return {'bool': True }
 
-
-def check_rating(rating_val, channel):
-    try:
-        rating = int(rating_val)
-        if rating < 1 or rating > 5:
-            send_response('invalid_rating', channel)
-            return False
-        else:
-            return True
-    except ValueError:
-        send_response('invalid_rating', channel)
-        return False
-
-def check_option_selected(option, channel, day, week):
-    variables = ('breakfast', 'monday', week,)
+def check_option_selected(option, day, week, meal):
+    variables = (meal, day, week,)
     sql = CustomSQL()
 
     query_string = "SELECT count(option) FROM menu_table WHERE meal = (%s) AND day = (%s) AND week = (%s)"
     option_count_sql = sql.query(query_string, variables)
     option_count = int(option_count_sql[0][0])
 
-    if int(option) > option_count:
-        send_response('invalid_option', channel, {'option_count': option_count})
-        return {'bool': False, 'template': 'invalid_option'}
+    try:
+        if int(option) > option_count:
+            return {'bool': False, 'option': option_count}
+    except ValueError:
+        return {'bool': False, 'option': option_count}
     else:
-        return {'bool': True}
+        return {'bool': True }
+
+def check_rating(rating_val):
+    try:
+        rating = int(rating_val)
+        if rating not in range(1, 6):
+            return {'bool': False}
+        else:
+            return {'bool': True }
+    except ValueError:
+        return {'bool': False}
+
 
 
 class Response:
@@ -155,8 +152,9 @@ class Response:
                       show_menu_dict['context'])
 
     @staticmethod
-    def rate(channel, buff, user_id):
-        day = get_day_of_week()
+    def get_rate_template_context(buff, user_id):
+        # day = get_day_of_week()
+        day = 'monday'
         week = get_week_number()
         # if day in ['saturday', 'sunday']:
         #     send_response('weekend_meal_error', channel)
@@ -166,63 +164,33 @@ class Response:
         rating = buff[3]
         comment = " ".join(buff[4:]) or "no comment"
 
-        if check_meal_selected(meal, channel)['bool'] is False:
-            return
-        if check_option_selected(option, channel, day, week) is False:
-            return
-        if check_rating(rating, channel) is False:
-            return
-            
+        check_option = check_option_selected(option, day, week, meal)
+
+        if check_meal_selected(meal)['bool'] is False:
+            return {'template': 'invalid_meal', 'context': {}}
+
+        if check_option['bool'] is False:
+            return {'template': 'invalid_option', 'context': {'option_count': check_option['option']}}
+
+        if check_rating(rating)['bool'] is False:
+            return {'template': 'invalid_rating', 'context': {}}
+
         variables = (meal, 'tuesday', week, option,)
         sql = CustomSQL()
         query_string = "SELECT id FROM menu_table WHERE meal = (%s) AND day = (%s) AND week = (%s) AND option = (%s) "
         result = sql.query(query_string, variables)
         food_menu_id = int(result[0][0])
 
-        variables_2 = (datetime.date(2005, 11, 18), user_id, food_menu_id, rating, comment)
-        sqli = CustomSQL()
-        query_string_2 = "INSERT INTO rating (date, user_id, menu_id, rate, comment) VALUES (%s, %s, %s, %s, %s)"
-        sqli.command(query_string_2, variables_2)
-        send_response("rating_response", channel)
+        variables = (datetime.date(2005, 11, 18), user_id, food_menu_id, rating, comment)
+        query_string = "INSERT INTO rating (date, user_id, menu_id, rate, comment) VALUES (%s, %s, %s, %s, %s)"
+        sql.command(query_string, variables)
+        return {'template': 'rating_response', 'context': {}}
 
-
-
-
-
-
-    #     day_of_week = day_of_week_to_string(datetime.datetime.today().weekday())
-
-    #     #Get food menu id
-    #     query_string = 'SELECT id_food_menu FROM food_bot_schema.food_menu where meal = "' + meal + '" and food_menu.meal_option = "' + option.upper() + '" and day_of_week = "' + day_of_week + '"'
-    #     sql = CustomSQL()
-    #     food_menu_id = sql.query(query_string)[0][0]
-
-    #     check_meal_option(meal, option, channel)
-
-    #     if str(rating).isdigit():
-    #         query_string = 'insert into ratings (rating, comment, id_users, id_food_menu, date_served) values (' + str(rating) + ', NULL, "' + str(user_id) + '", ' + str(food_menu_id) + ', sysdate() )'
-    #         sql.command(query_string)
-    #         outputs.append([channel, "You have rated for this meal."])
-    #     else:
-    #         outputs.append([channel, "Your rating must be a number. Type `help` to get help."])
 
     @staticmethod
-    def enter_comment(channel, buff):
-        print "Comment functionality in progress"
-    #     meal = buff[1]
-    #     option = buff[2]
-    #     comment = buff[3:]
-
-    #     check_meal_option(meal, option, channel)
-
-    #     str_comment = ""
-
-    #     for i in comment:
-    #         str_comment = str_comment + i + ' '
-
-    #     str_comment = str_comment.rstrip(' ')
-
-    #     outputs.append([channel, "Code functionality in progress. Your comment is: " + str_comment])
+    def rate(channel, buff, user_id):
+        rate_context_dict = Response.get_rate_template_context(buff, user_id)
+        send_response(rate_context_dict ['template'], channel, rate_context_dict['context'])
 
     @staticmethod
     def get_average_ratings(channel):
