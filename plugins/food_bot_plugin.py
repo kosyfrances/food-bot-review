@@ -131,7 +131,7 @@ class Helper:
         except ValueError:
             return {'bool': False, 'option': option_count}
         else:
-            return {'bool': True}
+            return {'bool': True }
 
     @staticmethod
     def check_rating(rating_val):
@@ -140,7 +140,7 @@ class Helper:
             if rating not in range(1, 6):
                 return {'bool': False}
             else:
-                return {'bool': True}
+                return {'bool': True }
         except ValueError:
             return {'bool': False}
 
@@ -199,7 +199,7 @@ class Response:
     @staticmethod
     def rate(channel, buff, user_id):
         rate_context_dict = Helper.get_rate_template_context(buff, user_id)
-        send_response(rate_context_dict['template'], channel, rate_context_dict['context'])
+        send_response(rate_context_dict ['template'], channel, rate_context_dict['context'])
 
     @staticmethod
     def get_average_ratings(channel):
