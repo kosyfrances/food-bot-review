@@ -38,11 +38,11 @@ class CustomSQL:
         print "Closing connection!\n"
         self.conn.close()
 
-    # def command(self, query_string):
-    #     self.connect()
-    #     self.cursor.execute(query_string)
-    #     self.cursor.execute('commit')
-    #     self.disconnect()
+    def command(self, query_string, variables):
+        self.connect()
+        self.cursor.execute(query_string, variables)
+        self.cursor.execute('commit')
+        self.disconnect()
 
     def query(self, query_string, variables):
         self.connect()
@@ -50,6 +50,5 @@ class CustomSQL:
         result = []
         for row in self.cursor:
             result.append(row)
-
         self.disconnect()
         return result

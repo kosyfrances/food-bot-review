@@ -52,6 +52,9 @@ def process_message(data):
 def get_day_of_week():
     return datetime.datetime.now().strftime('%A').lower()
 
+def get_date():
+    return datetime.datetime.now().strftime("%A %b %d %Y")
+
 
 def get_week_number():
     week = (datetime.datetime.now().isocalendar()[1] % 2) + 1
@@ -69,8 +72,19 @@ def check_meal_selected(meal, channel):
         return {'bool': True}
 
 
-def check_option_selected(option, channel, day):
-    week = get_week_number()
+def check_rating(rating_val, channel):
+    try:
+        rating = int(rating_val)
+        if rating < 1 or rating > 5:
+            send_response('invalid_rating', channel)
+            return False
+        else:
+            return True
+    except ValueError:
+        send_response('invalid_rating', channel)
+        return False
+
+def check_option_selected(option, channel, day, week):
     variables = ('breakfast', 'monday', week,)
     sql = CustomSQL()
 
@@ -143,19 +157,36 @@ class Response:
     @staticmethod
     def rate(channel, buff, user_id):
         day = get_day_of_week()
+        week = get_week_number()
         # if day in ['saturday', 'sunday']:
         #     send_response('weekend_meal_error', channel)
-
         # else:
         meal = buff[1]
         option = buff[2]
         rating = buff[3]
+        comment = " ".join(buff[4:]) or "no comment"
 
         if check_meal_selected(meal, channel)['bool'] is False:
             return
-
-        if check_option_selected(option, channel, day) is False:
+        if check_option_selected(option, channel, day, week) is False:
             return
+        if check_rating(rating, channel) is False:
+            return
+            
+        variables = (meal, 'tuesday', week, option,)
+        sql = CustomSQL()
+        query_string = "SELECT id FROM menu_table WHERE meal = (%s) AND day = (%s) AND week = (%s) AND option = (%s) "
+        result = sql.query(query_string, variables)
+        food_menu_id = int(result[0][0])
+
+        variables_2 = (datetime.date(2005, 11, 18), user_id, food_menu_id, rating, comment)
+        sqli = CustomSQL()
+        query_string_2 = "INSERT INTO rating (date, user_id, menu_id, rate, comment) VALUES (%s, %s, %s, %s, %s)"
+        sqli.command(query_string_2, variables_2)
+        send_response("rating_response", channel)
+
+
+
 
 
 
