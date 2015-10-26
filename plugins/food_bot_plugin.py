@@ -148,7 +148,6 @@ class Helper:
         else:
             return True
 
-
     @staticmethod
     def get_rate_template_context(buff, user_id):
         """
@@ -166,13 +165,15 @@ class Helper:
             rating = buff[3]
             comment = " ".join(buff[4:]) or "no comment"
 
-            check_option = Helper.check_option_selected(option, day, week, meal)
+            check_option = Helper.check_option_selected(option, day, week,
+                                                        meal)
 
             if Helper.check_meal_selected(meal) is False:
                 return {'template': 'invalid_meal', 'context': {}}
 
             if check_option['bool'] is False:
-                return {'template': 'invalid_option', 'context': {'option_count': check_option['option']}}
+                return {'template': 'invalid_option',
+                        'context': {'option_count': check_option['option']}}
 
             if Helper.check_rating(rating) is False:
                 return {'template': 'invalid_rating', 'context': {}}
@@ -204,12 +205,12 @@ class Response:
     @staticmethod
     def rate(channel, buff, user_id):
         rate_context_dict = Helper.get_rate_template_context(buff, user_id)
-        send_response(rate_context_dict ['template'], channel, rate_context_dict['context'])
+        send_response(rate_context_dict['template'], channel,
+                      rate_context_dict['context'])
 
     @staticmethod
     def get_average_ratings(channel):
         print "Get average ratings functionality in progress"
-    #     outputs.append([channel, "Get average rating was called...Code functionality in progress"])
 
     @staticmethod
     def show_error(channel):

@@ -76,4 +76,5 @@ class TestShowMenu(unittest.TestCase):
         self.assertEqual(menu_response_dict, {'template': 'menu_response',
                          'context': {'menu': "menu list as dict"}})
 
-        CustomSQL.query.assert_called_with("SELECT food, meal, option FROM menu_table WHERE day = (%s) AND week = (%s)",("monday", '1'))
+        CustomSQL.query.assert_called_with(
+            "SELECT food, meal, option FROM menu_table WHERE day = (%s) AND week = (%s)",("monday", '1'))
