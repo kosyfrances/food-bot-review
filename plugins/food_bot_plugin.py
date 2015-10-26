@@ -204,6 +204,13 @@ class Response:
         rate_context_dict = Helper.get_rate_template_context(buff, user_id)
         send_response(rate_context_dict['template'], channel,
                       rate_context_dict['context'])
+<<<<<<< HEAD
+=======
+
+    @staticmethod
+    def get_average_ratings(channel):
+        print "Get average ratings functionality in progress"
+>>>>>>> Code cleanup, add test for checking option selected and rating
 
     @staticmethod
     def show_error(channel):
