@@ -180,7 +180,6 @@ class Helper:
             query_string = 'SELECT id FROM menu_table WHERE meal = (%s) AND day = (%s) AND week = (%s) AND option = (%s)'
             result = sql.query(query_string, variables)
             food_menu_id = int(result[0][0])
-
             variables = (user_id, food_menu_id, rating, comment)
             query_string = "INSERT INTO rating (user_id, menu_id, rate, comment) VALUES (%s, %s, %s, %s)"
             sql.command(query_string, variables)
