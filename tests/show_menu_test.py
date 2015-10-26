@@ -1,6 +1,6 @@
 import unittest
 from mock import patch
-from plugins.food_bot_plugin import Response, Helper
+from plugins.food_bot_plugin import Helper
 from custom_sql import CustomSQL
 
 
@@ -56,13 +56,13 @@ class TestShowMenu(unittest.TestCase):
     @patch.object(Helper, 'get_week_number', return_value="1")
     def test_correct_template_name_and_context(self, *args):
         invalid_day_response_dict = Helper.get_menu_template_context(['menu',
-                                                                       'asdf'])
+                                                                      'asdf'])
         weekend_response_dict = Helper.get_menu_template_context(['menu',
-                                                                   'saturday'])
+                                                                  'saturday'])
         weekend_response_dict2 = Helper.get_menu_template_context(['menu',
-                                                                    'SUNDAY'])
+                                                                   'SUNDAY'])
         weekday_response_dict = Helper.get_menu_template_context(['menu',
-                                                                   'tuesday'])
+                                                                  'tuesday'])
         menu_response_dict = Helper.get_menu_template_context(['menu'])
 
         self.assertEqual(invalid_day_response_dict,

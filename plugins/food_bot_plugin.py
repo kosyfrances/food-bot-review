@@ -111,10 +111,11 @@ class Helper:
 
     @staticmethod
     def check_meal_selected(meal):
-        if meal.lower() != 'breakfast' and meal.lower() != 'lunch':
-            return {'bool': False}
-        else:
-            return {'bool': True }
+        if meal and isinstance(meal, str):
+            if meal.lower() not in ['breakfast', 'lunch']:
+                return False
+            else:
+                return True
 
     @staticmethod
     def check_option_selected(option, day, week, meal):
@@ -126,23 +127,27 @@ class Helper:
         option_count = int(option_count_sql[0][0])
 
         try:
-            if int(option) > option_count:
-                return {'bool': False, 'option': option_count}
+            option_int = int(option)
         except ValueError:
+            option_int = 0
+
+        if option_int not in range(1, option_count + 1):
             return {'bool': False, 'option': option_count}
         else:
-            return {'bool': True }
+            return {'bool': True}
 
     @staticmethod
     def check_rating(rating_val):
         try:
             rating = int(rating_val)
-            if rating not in range(1, 6):
-                return {'bool': False}
-            else:
-                return {'bool': True }
         except ValueError:
-            return {'bool': False}
+            rating = 0
+
+        if rating not in range(1, 6):
+            return False
+        else:
+            return True
+
 
     @staticmethod
     def get_rate_template_context(buff, user_id):
@@ -163,13 +168,13 @@ class Helper:
 
             check_option = Helper.check_option_selected(option, day, week, meal)
 
-            if Helper.check_meal_selected(meal)['bool'] is False:
+            if Helper.check_meal_selected(meal) is False:
                 return {'template': 'invalid_meal', 'context': {}}
 
             if check_option['bool'] is False:
                 return {'template': 'invalid_option', 'context': {'option_count': check_option['option']}}
 
-            if Helper.check_rating(rating)['bool'] is False:
+            if Helper.check_rating(rating) is False:
                 return {'template': 'invalid_rating', 'context': {}}
 
             variables = (meal, 'tuesday', week, option,)

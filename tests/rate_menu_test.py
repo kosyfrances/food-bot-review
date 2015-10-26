@@ -1,11 +1,19 @@
 import unittest
 from mock import patch
-from plugins.food_bot_plugin import Response
+from plugins.food_bot_plugin import Response, Helper
 from plugins import food_bot_plugin
+from custom_sql import CustomSQL
 
 
 class TestRateMenu(unittest.TestCase):
-    pass
+
+    def test_check_meal_selected(self):
+        self.assertTrue(Helper.check_meal_selected('breakfast'))
+        self.assertTrue(Helper.check_meal_selected('lunch'))
+        self.assertFalse(Helper.check_meal_selected('breakfas'))
+        self.assertFalse(Helper.check_meal_selected('unch'))
+        self.assertFalse(Helper.check_meal_selected(None))
+        self.assertFalse(Helper.check_meal_selected(5))
 
     # @patch('plugins.food_bot_plugin.get_day_of_week', return_value="saturday")
     # def test_user_gets_weekend_meal_error_on_weekend(self, *args):
