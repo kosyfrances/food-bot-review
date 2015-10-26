@@ -46,14 +46,3 @@ class TestRateMenu(unittest.TestCase):
 
     def test_wrong_meal_selected_returns_correct_error_template(self):
         pass
-
-    # def test_meal_selected_returns_correct_response(self):
-    #     wrong_meal = food_bot_plugin.check_meal_selected('asdf', u'D0CLHTW20')
-    #     breakfast = food_bot_plugin.check_meal_selected('breakfast', u'D0CLHTW20')
-    #     lunch = food_bot_plugin.check_meal_selected('lunch', u'D0CLHTW20')
-    #
-    #     self.assertFalse(wrong_meal['bool'])
-    #     self.assertEqual(wrong_meal['template'], 'invalid_meal')
-    #
-    #     self.assertTrue(breakfast['bool'])
-    #     self.assertTrue(lunch['bool'])
