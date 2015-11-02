@@ -53,7 +53,7 @@ CREATE TABLE menu_table (id SERIAL PRIMARY KEY,
                  );
 
 CREATE TABLE rating (id SERIAL PRIMARY KEY,
-                    date DATE NOT NULL,
+                    date timestamp without time zone default (now() at time zone 'utc'),
                     user_id VARCHAR(20),
                     menu_id INT REFERENCES menu_table(id),
                     rate INT NOT NULL,

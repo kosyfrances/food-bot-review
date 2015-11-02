@@ -154,8 +154,8 @@ class Helper:
         return the template name and correct context for rating and comment
         """
         day = Helper.get_day_of_week()
-        # day = 'monday'
         week = Helper.get_week_number()
+
         if day in ['saturday', 'sunday']:
             return {'template': 'weekend_rate_error', 'context': {}}
 

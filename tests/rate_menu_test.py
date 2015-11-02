@@ -36,13 +36,17 @@ class TestRateMenu(unittest.TestCase):
         self.assertFalse(Helper.check_rating('w'))
         self.assertFalse(Helper.check_rating('asdf'))
 
-    # @patch('plugins.food_bot_plugin.get_day_of_week', return_value="saturday")
-    # def test_user_gets_weekend_meal_error_on_weekend(self, *args):
-    #     buff = ['rate', 'breakfast', '2', '5']
-    #     rate_context = Response.get_rate_template_context(buff)
-    #
-    #     self.assertEqual(rate_context, {'template': 'weekend_meal_error', 'context': {}})
-    #
+    @patch.object(Helper, 'get_day_of_week', return_value="saturday")
+    def test_user_gets_weekend_rate_error_on_weekend(self, *args):
+        buff = ['rate', 'breakfast', '2', '5']
+        user_id = 'U0774N56J'
+        rate_context = Helper.get_rate_template_context(buff, user_id)
+
+        self.assertEqual(rate_context, {'template': 'weekend_rate_error', 'context': {}})
+
+    def test_wrong_meal_selected_returns_correct_error_template(self):
+        pass
+
     # def test_meal_selected_returns_correct_response(self):
     #     wrong_meal = food_bot_plugin.check_meal_selected('asdf', u'D0CLHTW20')
     #     breakfast = food_bot_plugin.check_meal_selected('breakfast', u'D0CLHTW20')
