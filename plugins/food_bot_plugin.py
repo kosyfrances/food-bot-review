@@ -181,7 +181,7 @@ class Helper:
             result = sql.query(query_string, variables)
             food_menu_id = int(result[0][0])
             variables = (user_id, food_menu_id, rating, comment)
-            query_string = "INSERT INTO rating (user_id, menu_id, rate, comment) VALUES (%s, %s, %s, %s)"
+            query_string = 'INSERT INTO rating (user_id, menu_id, rate, comment) VALUES (%s, %s, %s, %s)'
             sql.command(query_string, variables)
             return {'template': 'rating_response', 'context': {}}
 
@@ -206,7 +206,7 @@ class Response:
 
     @staticmethod
     def get_average_ratings(channel):
-        print "Get average ratings functionality in progress"
+        print 'Get average ratings functionality in progress'
 
     @staticmethod
     def show_error(channel):

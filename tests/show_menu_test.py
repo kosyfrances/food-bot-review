@@ -77,4 +77,4 @@ class TestShowMenu(unittest.TestCase):
                          'context': {'menu': 'menu list as dict'}})
 
         CustomSQL.query.assert_called_with(
-            "SELECT food, meal, option FROM menu_table WHERE day = (%s) AND week = (%s)",("monday", '1'))
+            'SELECT food, meal, option FROM menu_table WHERE day = (%s) AND week = (%s)',('monday', '1'))
