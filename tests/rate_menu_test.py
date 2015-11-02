@@ -39,7 +39,6 @@ class TestRateMenu(unittest.TestCase):
         self.assertFalse(Helper.check_rating('w'))
         self.assertFalse(Helper.check_rating('asdf'))
 
-
     @patch.object(Helper, 'get_day_of_week', return_value='saturday')
     def test_user_gets_weekend_rate_error_on_weekend(self, *args):
         buff = ['rate', 'breakfast', '2', '5']
