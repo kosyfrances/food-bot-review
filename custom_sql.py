@@ -4,16 +4,16 @@ import urlparse
 
 class CustomSQL:
     def __init__(self):
-        self.cursor = ""
-        self.conn = ""
+        self.cursor = ''
+        self.conn = ''
 
     def connect(self):
         from config import Config
         config = Config()
 
-        if config["ENVIRONMENT"] == 'production':
-            urlparse.uses_netloc.append("postgres")
-            url = urlparse.urlparse(config["DATABASE_URL"])
+        if config['ENVIRONMENT'] == 'production':
+            urlparse.uses_netloc.append('postgres')
+            url = urlparse.urlparse(config['DATABASE_URL'])
             self.conn = psycopg2.connect(
                 database=url.path[1:],
                 user=url.username,
@@ -25,17 +25,17 @@ class CustomSQL:
         else:
             conn_string = "host='localhost' dbname='food_bot'"
 
-            print "Connecting to database\n ->%s" % (conn_string)
+            print 'Connecting to database\n ->%s' % (conn_string)
 
             self.conn = psycopg2.connect(conn_string)
 
         # conn.cursor will return a cursor object
         # you can use this cursor to perform queries
         self.cursor = self.conn.cursor()
-        print "Connected!\n"
+        print 'Connected!\n'
 
     def disconnect(self):
-        print "Closing connection!\n"
+        print 'Closing connection!\n'
         self.conn.close()
 
     def command(self, query_string, variables):

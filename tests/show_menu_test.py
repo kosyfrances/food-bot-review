@@ -50,10 +50,10 @@ class TestShowMenu(unittest.TestCase):
         compare_menu_dict(expected_dict, unsorted_menu_dict)
 
     @patch.object(Helper, 'convert_menu_list_to_dict',
-                  return_value="menu list as dict")
-    @patch.object(CustomSQL, 'query', return_value="custom sql query")
-    @patch.object(Helper, 'get_day_of_week', return_value="monday")
-    @patch.object(Helper, 'get_week_number', return_value="1")
+                  return_value='menu list as dict')
+    @patch.object(CustomSQL, 'query', return_value='custom sql query')
+    @patch.object(Helper, 'get_day_of_week', return_value='monday')
+    @patch.object(Helper, 'get_week_number', return_value='1')
     def test_correct_template_name_and_context(self, *args):
         invalid_day_response_dict = Helper.get_menu_template_context(['menu',
                                                                       'asdf'])
@@ -72,9 +72,9 @@ class TestShowMenu(unittest.TestCase):
         self.assertEqual(weekend_response_dict2,
                          {'template': 'weekend_meal_error', 'context': {}})
         self.assertEqual(weekday_response_dict, {'template': 'menu_response',
-                         'context': {'menu': "menu list as dict"}})
+                         'context': {'menu': 'menu list as dict'}})
         self.assertEqual(menu_response_dict, {'template': 'menu_response',
-                         'context': {'menu': "menu list as dict"}})
+                         'context': {'menu': 'menu list as dict'}})
 
         CustomSQL.query.assert_called_with(
-            "SELECT food, meal, option FROM menu_table WHERE day = (%s) AND week = (%s)",("monday", '1'))
+            'SELECT food, meal, option FROM menu_table WHERE day = (%s) AND week = (%s)',('monday', '1'))

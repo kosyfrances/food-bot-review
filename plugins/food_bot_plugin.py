@@ -18,7 +18,7 @@ def send_response(template_name, channel, context=None):
 
 
 def process_message(data):
-    if data['channel'].startswith("D"):
+    if data['channel'].startswith('D'):
         if 'subtype' in data:
             return
 
@@ -56,7 +56,7 @@ class Helper:
 
     @staticmethod
     def get_date():
-        return datetime.datetime.now().strftime("%A %b %d %Y")
+        return datetime.datetime.now().strftime('%A %b %d %Y')
 
     @staticmethod
     def get_week_number():
@@ -95,7 +95,7 @@ class Helper:
             week = Helper.get_week_number()
 
             variables = (day, week,)
-            query_string = "SELECT food, meal, option FROM menu_table WHERE day = (%s) AND week = (%s)"
+            query_string = 'SELECT food, meal, option FROM menu_table WHERE day = (%s) AND week = (%s)'
             menu = sql.query(query_string, variables)
 
             if menu:
@@ -122,7 +122,7 @@ class Helper:
         variables = (meal, day, week,)
         sql = CustomSQL()
 
-        query_string = "SELECT count(option) FROM menu_table WHERE meal = (%s) AND day = (%s) AND week = (%s)"
+        query_string = 'SELECT count(option) FROM menu_table WHERE meal = (%s) AND day = (%s) AND week = (%s)'
         option_count_sql = sql.query(query_string, variables)
         option_count = int(option_count_sql[0][0])
 
@@ -163,7 +163,7 @@ class Helper:
             meal = buff[1]
             option = buff[2]
             rating = buff[3]
-            comment = " ".join(buff[4:]) or "no comment"
+            comment = ' '.join(buff[4:]) or 'no comment'
 
             check_option = Helper.check_option_selected(option, day, week,
                                                         meal)
@@ -180,12 +180,12 @@ class Helper:
 
             variables = (meal, day, week, option,)
             sql = CustomSQL()
-            query_string = "SELECT id FROM menu_table WHERE meal = (%s) AND day = (%s) AND week = (%s) AND option = (%s) "
+            query_string = 'SELECT id FROM menu_table WHERE meal = (%s) AND day = (%s) AND week = (%s) AND option = (%s)'
             result = sql.query(query_string, variables)
             food_menu_id = int(result[0][0])
 
             variables = (user_id, food_menu_id, rating, comment)
-            query_string = "INSERT INTO rating (user_id, menu_id, rate, comment) VALUES (%s, %s, %s, %s)"
+            query_string = 'INSERT INTO rating (user_id, menu_id, rate, comment) VALUES (%s, %s, %s, %s)'
             sql.command(query_string, variables)
             return {'template': 'rating_response', 'context': {}}
 
@@ -210,7 +210,7 @@ class Response:
 
     @staticmethod
     def get_average_ratings(channel):
-        print "Get average ratings functionality in progress"
+        print 'Get average ratings functionality in progress'
 
     @staticmethod
     def show_error(channel):

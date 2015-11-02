@@ -39,7 +39,7 @@ class TestRateMenu(unittest.TestCase):
         self.assertFalse(Helper.check_rating('w'))
         self.assertFalse(Helper.check_rating('asdf'))
 
-    @patch.object(Helper, 'get_day_of_week', return_value="saturday")
+    @patch.object(Helper, 'get_day_of_week', return_value='saturday')
     def test_user_gets_weekend_rate_error_on_weekend(self, *args):
         buff = ['rate', 'breakfast', '2', '5']
         user_id = 'U0774N56J'
@@ -56,7 +56,7 @@ class TestRateMenu(unittest.TestCase):
                                         'context': {}})
 
     @patch.object(CustomSQL, 'query', return_value=[(3L,)])
-    @patch.object(Helper, 'get_day_of_week', return_value="wednesday")
+    @patch.object(Helper, 'get_day_of_week', return_value='wednesday')
     def test_wrong_meal_selected_returns_correct_error_template(self, *args):
         buff = ['rate', 'asdflkj', '2', '5']
 
@@ -66,7 +66,7 @@ class TestRateMenu(unittest.TestCase):
                                         'context': {}})
 
     @patch.object(CustomSQL, 'query', return_value=[(3L,)])
-    @patch.object(Helper, 'get_day_of_week', return_value="wednesday")
+    @patch.object(Helper, 'get_day_of_week', return_value='wednesday')
     def test_wrong_option_selected_returns_correct_error_template(self, *args):
         buff = ['rate', 'breakfast', '10', '5']
 
@@ -76,7 +76,7 @@ class TestRateMenu(unittest.TestCase):
                                         'template': 'invalid_option'})
 
     @patch.object(CustomSQL, 'query', return_value=[(3L,)])
-    @patch.object(Helper, 'get_day_of_week', return_value="wednesday")
+    @patch.object(Helper, 'get_day_of_week', return_value='wednesday')
     def test_invalid_rating_returns_correct_error_template(self, *args):
         negative_rate_buff = ['rate', 'breakfast', '2', '-1']
         zero_rate_buff = ['rate', 'breakfast', '2', '0']
@@ -97,9 +97,9 @@ class TestRateMenu(unittest.TestCase):
                                               'template': 'invalid_rating'})
 
     @patch.object(CustomSQL, 'query', return_value=[(3L,)])
-    @patch.object(CustomSQL, 'command', return_value="command object")
-    @patch.object(Helper, 'get_day_of_week', return_value="monday")
-    @patch.object(Helper, 'get_week_number', return_value="1")
+    @patch.object(CustomSQL, 'command', return_value='command object')
+    @patch.object(Helper, 'get_day_of_week', return_value='monday')
+    @patch.object(Helper, 'get_week_number', return_value='1')
     def test_valid_rate_returns_correct_template(self, *args):
         buff = ['rate', 'breakfast', '2', '5']
 
@@ -108,4 +108,4 @@ class TestRateMenu(unittest.TestCase):
         self.assertEqual(rate_context, {'template': 'rating_response',
                                         'context': {}})
         CustomSQL.query.assert_called_with(
-            "SELECT id FROM menu_table WHERE meal = (%s) AND day = (%s) AND week = (%s) AND option = (%s) ",("breakfast", "monday", "1", "2"))
+            'SELECT id FROM menu_table WHERE meal = (%s) AND day = (%s) AND week = (%s) AND option = (%s)', ('breakfast', 'monday', '1', '2'))
