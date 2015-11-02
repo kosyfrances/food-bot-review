@@ -178,7 +178,7 @@ class Helper:
             if Helper.check_rating(rating) is False:
                 return {'template': 'invalid_rating', 'context': {}}
 
-            variables = (meal, 'tuesday', week, option,)
+            variables = (meal, day, week, option,)
             sql = CustomSQL()
             query_string = "SELECT id FROM menu_table WHERE meal = (%s) AND day = (%s) AND week = (%s) AND option = (%s) "
             result = sql.query(query_string, variables)
