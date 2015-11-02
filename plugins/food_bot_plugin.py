@@ -39,9 +39,6 @@ def process_message(data):
         elif text_buffer == 'rate' and len(buff) > 3:
             Response.rate(channel, buff, user_id)
 
-        elif text_buffer == 'get-rating':
-            Response.get_average_ratings(channel)
-
         else:
             Response.show_error(channel)
 
@@ -207,10 +204,6 @@ class Response:
         rate_context_dict = Helper.get_rate_template_context(buff, user_id)
         send_response(rate_context_dict['template'], channel,
                       rate_context_dict['context'])
-
-    @staticmethod
-    def get_average_ratings(channel):
-        print 'Get average ratings functionality in progress'
 
     @staticmethod
     def show_error(channel):
