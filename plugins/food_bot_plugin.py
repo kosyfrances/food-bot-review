@@ -182,7 +182,7 @@ class Helper:
             food_menu_id = int(result[0][0])
 
             variables = (user_id, food_menu_id, rating, comment)
-            query_string = 'INSERT INTO rating (user_id, menu_id, rate, comment) VALUES (%s, %s, %s, %s)'
+            query_string = "INSERT INTO rating (user_id, menu_id, rate, comment) VALUES (%s, %s, %s, %s)"
             sql.command(query_string, variables)
             return {'template': 'rating_response', 'context': {}}
 
