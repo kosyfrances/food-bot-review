@@ -48,12 +48,12 @@ CREATE TABLE menu_table (id SERIAL PRIMARY KEY,
                    day VARCHAR(10) NOT NULL,
                    food VARCHAR(60) NOT NULL,
                    meal VARCHAR(10) NOT NULL,
-                   option CHAR(1) NOT NULL,
-                   week CHAR(1) NOT NULL
+                   option INT NOT NULL,
+                   week INT NOT NULL
                  );
 
 CREATE TABLE rating (id SERIAL PRIMARY KEY,
-                    date DATE NOT NULL,
+                    date timestamp without time zone default (now() at time zone 'utc'),
                     user_id VARCHAR(20),
                     menu_id INT REFERENCES menu_table(id),
                     rate INT NOT NULL,

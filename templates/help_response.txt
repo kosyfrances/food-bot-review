@@ -1,7 +1,14 @@
 ```Shows help menu: help
+
 Get the menu for today: menu
+
 Get the menu for any day: menu [DAY_OF_WEEK]
-Example: menu tuesday```
+Example: menu tuesday
+
+Rate today's meal: rate [meal] [option] [rating] [comment]
+Example: rate breakfast 1 4 great meal I really enjoyed it
+NOTE: [comment] is optional
+```
 
 
 ## "\n"

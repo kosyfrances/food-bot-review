@@ -1,0 +1,1 @@
+```Sorry, valid meal ratings is on a scale of 1 to 5. ```
