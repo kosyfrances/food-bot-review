@@ -205,9 +205,5 @@ class Response:
                       rate_context_dict['context'])
 
     @staticmethod
-    def get_average_ratings(channel):
-        print 'Get average ratings functionality in progress'
-
-    @staticmethod
     def show_error(channel):
         send_response('wrong_command', channel)

@@ -20,7 +20,6 @@ class TestProcessMessage(unittest.TestCase):
         self.assertTrue(mock_response.show_help.called)
         self.assertFalse(mock_response.show_menu.called)
         self.assertFalse(mock_response.rate.called)
-        self.assertFalse(mock_response.get_average_ratings.called)
         self.assertFalse(mock_response.show_error.called)
 
     @mock.patch('plugins.food_bot_plugin.Response')
@@ -33,7 +32,6 @@ class TestProcessMessage(unittest.TestCase):
         self.assertTrue(mock_response.show_menu.called)
         self.assertFalse(mock_response.show_help.called)
         self.assertFalse(mock_response.rate.called)
-        self.assertFalse(mock_response.get_average_ratings.called)
         self.assertFalse(mock_response.show_error.called)
 
     @mock.patch('plugins.food_bot_plugin.Response')
@@ -46,7 +44,6 @@ class TestProcessMessage(unittest.TestCase):
         self.assertTrue(mock_response.rate.called)
         self.assertFalse(mock_response.show_help.called)
         self.assertFalse(mock_response.show_menu.called)
-        self.assertFalse(mock_response.get_average_ratings.called)
         self.assertFalse(mock_response.show_error.called)
 
     @mock.patch('plugins.food_bot_plugin.Response')
@@ -60,7 +57,6 @@ class TestProcessMessage(unittest.TestCase):
         self.assertFalse(mock_response.show_help.called)
         self.assertFalse(mock_response.show_menu.called)
         self.assertFalse(mock_response.rate.called)
-        self.assertFalse(mock_response.get_average_ratings.called)
 
     @mock.patch('plugins.food_bot_plugin.Response')
     def test_bot_only_replies_to_direct_messages(self, mock_response):
@@ -73,7 +69,6 @@ class TestProcessMessage(unittest.TestCase):
         self.assertFalse(mock_response.show_help.called)
         self.assertFalse(mock_response.show_menu.called)
         self.assertFalse(mock_response.rate.called)
-        self.assertFalse(mock_response.get_average_ratings.called)
 
     @mock.patch('plugins.food_bot_plugin.Response')
     def test_bot_does_not_respond_when_message_is_edited(self, mock_response):
@@ -87,7 +82,6 @@ class TestProcessMessage(unittest.TestCase):
         self.assertFalse(mock_response.show_help.called)
         self.assertFalse(mock_response.show_menu.called)
         self.assertFalse(mock_response.rate.called)
-        self.assertFalse(mock_response.get_average_ratings.called)
 
     @mock.patch('plugins.food_bot_plugin.Response')
     def test_bot_does_not_respond_when_message_is_deleted(self, mock_response):
@@ -101,7 +95,6 @@ class TestProcessMessage(unittest.TestCase):
         self.assertFalse(mock_response.show_help.called)
         self.assertFalse(mock_response.show_menu.called)
         self.assertFalse(mock_response.rate.called)
-        self.assertFalse(mock_response.get_average_ratings.called)
 
     @mock.patch('plugins.food_bot_plugin.Response')
     def test_bot_does_not_respond_when_server_is_started(self, mock_response):
@@ -115,4 +108,3 @@ class TestProcessMessage(unittest.TestCase):
         self.assertFalse(mock_response.show_help.called)
         self.assertFalse(mock_response.show_menu.called)
         self.assertFalse(mock_response.rate.called)
-        self.assertFalse(mock_response.get_average_ratings.called)
