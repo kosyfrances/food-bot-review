@@ -1,4 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/andela-kanyanwu/food-bot-review/badge.svg?branch=feature_coveralls_integration&service=github)](https://coveralls.io/github/andela-kanyanwu/food-bot-review?branch=feature_coveralls_integration)
+[![Coverage Status](https://coveralls.io/repos/andela-kanyanwu/food-bot-review/badge.svg?branch=feature_coveralls_integration&service=github)](https://coveralls.io/github/andela-kanyanwu/food-bot-review?branch=master)
 
 # Food-bot-review
 
