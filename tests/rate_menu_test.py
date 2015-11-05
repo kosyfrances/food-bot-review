@@ -45,13 +45,6 @@ class TestRateMenu(unittest.TestCase):
         user_id = 'U0774N56J'
         rate_context = Helper.get_rate_template_context(buff, user_id)
 
-        self.assertEqual(rate_context, {'template': 'weekend_rate_error', 'context': {}})
-
-    def test_wrong_meal_selected_returns_correct_error_template(self):
-        pass
-
-        rate_context = Helper.get_rate_template_context(buff, self.user_id)
-
         self.assertEqual(rate_context, {'template': 'weekend_rate_error',
                                         'context': {}})
 

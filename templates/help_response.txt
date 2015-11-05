@@ -9,16 +9,3 @@ Rate today's meal: rate [meal] [option] [rating] [comment]
 Example: rate breakfast 1 4 great meal I really enjoyed it
 NOTE: [comment] is optional
 ```
-
-
-## "\n"
-## "\nRate today's meal"
-## "\n`rate [meal] [option] [rating]`"
-## "\nExample: rate lunch A 10"
-## "\n"
-## "\nTell me about the meal today"
-## "\n`comment [meal] [option] [comment]`"
-## "\nExample: comment breakfast B I enjoyed the meal"
-## "\n"
-## "\nGet the average food rating"
-## "\n`get ratings`
