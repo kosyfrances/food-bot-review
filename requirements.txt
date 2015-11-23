@@ -1,4 +1,7 @@
 backports.ssl-match-hostname==3.4.0.2
+Django==1.8
+django-envie==0.0.9
+djangorestframework==3.2.5
 docutils==0.12
 funcsigs==0.4
 lockfile==0.10.2
