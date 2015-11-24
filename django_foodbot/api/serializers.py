@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import MenuTable, Rating
+from api.models import Menu, Rating
 
 
 class RatingSerializer(serializers.ModelSerializer):
@@ -11,12 +11,12 @@ class RatingSerializer(serializers.ModelSerializer):
 
 
 
-class MenuTableSerializer(serializers.ModelSerializer):
+class MenuSerializer(serializers.ModelSerializer):
 
     rating= RatingSerializer(many=True, read_only=True)
 
     class Meta:
-        model = MenuTable
+        model = Menu
         fields = ('id','day','rating','food', 'meal', 'option', 'week') 
         
 

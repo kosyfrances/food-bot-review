@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 
-class MenuTable(models.Model):
+class Menu(models.Model):
 
     day=models.CharField(max_length=10, blank=False, null=False)
     food=models.CharField(max_length=60, blank=False, null=False)
@@ -19,7 +19,7 @@ class Rating(models.Model):
 
     date=models.DateTimeField(auto_now_add = True)
     user_id=models.CharField(max_length=20)
-    menu=models.ForeignKey(MenuTable, related_name='rating')
+    menu=models.ForeignKey(Menu, related_name='rating')
     rate=models.IntegerField(blank=False, null=False)
     comment=models.TextField(default='no comment', )
 

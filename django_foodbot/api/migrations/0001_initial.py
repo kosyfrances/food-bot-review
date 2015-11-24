@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='MenuTable',
+            name='Menu',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('day', models.CharField(max_length=10)),
@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('user_id', models.CharField(max_length=20)),
                 ('rate', models.IntegerField()),
                 ('comment', models.TextField(default=b'no comment')),
-                ('menu', models.ForeignKey(related_name='rating', to='api.MenuTable')),
+                ('menu', models.ForeignKey(related_name='rating', to='api.Menu')),
             ],
             options={
                 'ordering': ('-date',),
