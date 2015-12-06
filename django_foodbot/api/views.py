@@ -1,18 +1,9 @@
-from django.shortcuts import render
-from rest_framework import status
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework import filters
+from rest_framework.generics import ListAPIView
+
 from api.models import Menu, Rating
 from api.serializers import RatingSerializer, MenuSerializer
-from rest_framework.response import Response
-#from rest_framework.authtoken.models import Token
-from django.http import Http404
-from rest_framework.decorators import permission_classes
-from rest_framework.permissions import AllowAny
-from .setpage import LimitOffsetpage
-
-from rest_framework import filters
-from rest_framework.generics import GenericAPIView, ListAPIView
-# Create your views here.
+from api.setpage import LimitOffsetpage
 
 
 class MenuList(ListAPIView):
@@ -23,8 +14,8 @@ class MenuList(ListAPIView):
     model = Menu
     serializer_class = MenuSerializer
     pagination_class = LimitOffsetpage
-    #filter_backends = (filters.SearchFilter,)
-    #search_fields = ('name')
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name')
 
     def get_queryset(self):
         """
@@ -35,3 +26,20 @@ class MenuList(ListAPIView):
 
         return queryset
 
+
+class RatingList(ListAPIView):
+    """
+    List all ratings and comments
+    """
+    model = Rating
+    serializer_class = RatingSerializer
+    pagination_class = LimitOffsetpage
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the Ratings and Comments
+        for the currently authenticated user.
+        """
+        queryset = Rating.objects.all()
+
+        return queryset

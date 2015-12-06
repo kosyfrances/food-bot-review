@@ -36,9 +36,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework_swagger',
-    'rest_framework',
     'api',
+    'rest_framework',
+    'rest_framework_swagger',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -54,7 +54,6 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'django_foodbot.urls'
 
 WSGI_APPLICATION = 'django_foodbot.wsgi.application'
-
 
 
 TEMPLATES = [
@@ -78,13 +77,13 @@ STATICFILES_DIRS = (
 )
 
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR,'templates'),
+    os.path.join(BASE_DIR, 'templates'),
 )
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    )
+)
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
@@ -99,8 +98,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'food_bot',
-        'USER': 'Administrator',#os.getenv('DB_USER'),
-        'PASSWORD': 'administrator',#os.getenv('DB_PASSWORD'),
+        # 'USER': 'Administrator',#os.getenv('DB_USER'),
+        # 'PASSWORD': 'administrator',#os.getenv('DB_PASSWORD'),
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
@@ -120,17 +119,13 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
-        ),
+    ),
 
     'PAGINATE_BY': 10,                 # Default to 10
     'PAGINATE_BY_PARAM': 'page_size',  # Allow client to override, using `?page_size=xxx`.
     'MAX_PAGINATE_BY': 100             # Maximum limit allowed when using `?page_size=xxx`.
 }
 
-# SWAGGER_SETTINGS = {
-#     "title": "moments-bucketlist API ",
-#   "description": " A web API for creating Buckelist, i.e list of stuffs you want to do before you die.",
-# }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
