@@ -5,3 +5,19 @@
 env
 /debug.log
 *.dump
+staticfiles
+
+# environment files
+.env.*
+
+# Translations
+*.mo
+*.pot
+# database migrations
+django_foodbot/*/migrations/*
+
+# staticfiles
+django_foodbot/staticfiles/
+
+# env.yml
+.env.yml
