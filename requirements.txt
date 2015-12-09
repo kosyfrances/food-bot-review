@@ -1,6 +1,16 @@
 backports.ssl-match-hostname==3.4.0.2
+coverage==4.0.3
+dj-database-url==0.3.0
+dj-static==0.0.6
+Django==1.8.2
+django-envie==0.0.9
+django-postgrespool==0.3.0
+django-toolbelt==0.0.1
+djangorestframework==3.2.5
+docopt==0.6.2
 docutils==0.12
 funcsigs==0.4
+gunicorn==19.1.1
 lockfile==0.10.2
 Mako==1.0.2
 MarkupSafe==0.23
@@ -12,4 +22,6 @@ PyYAML==3.11
 requests==2.7.0
 six==1.9.0
 slackclient==0.15
+SQLAlchemy==1.0.9
+static3==0.6.1
 websocket-client==0.32.0
