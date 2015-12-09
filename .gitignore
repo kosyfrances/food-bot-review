@@ -18,3 +18,6 @@ django_foodbot/*/migrations/*
 
 # staticfiles
 django_foodbot/staticfiles/
+
+# env.yml
+.env.yml
