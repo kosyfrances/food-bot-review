@@ -13,3 +13,6 @@ script:
 
 after_success:
   coveralls
+
+notifications:
+    slack: food-review:iP55LweubU8UOBgu9e0cTeED
