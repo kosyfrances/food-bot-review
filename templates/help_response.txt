@@ -7,5 +7,6 @@ Example: menu tuesday
 
 Rate today's meal: rate [meal] [option] [rating] [comment]
 Example: rate breakfast 1 4 great meal I really enjoyed it
-NOTE: [option] is between 1 and 5 while [comment] is optional
+NOTE: [rating] is between 1 and 5 while [comment] is optional
+For meal option, send the command `menu` to get menu options
 ```
