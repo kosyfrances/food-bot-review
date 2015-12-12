@@ -34,6 +34,8 @@ class RatingList(ListAPIView):
     model = Rating
     serializer_class = RatingSerializer
     pagination_class = LimitOffsetpage
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('date')
 
     def get_queryset(self):
         """
