@@ -57,10 +57,11 @@ class Helper:
 
     @staticmethod
     def get_week_number():
-        week = (datetime.datetime.now().isocalendar()[1] % 2) + 1
-        # fall back code here
-        # if week == 0:
-        #     week = 2
+        week = (datetime.datetime.now().isocalendar()[1] % 2)
+        if week == 0:
+            week = 2
+        # fall back code here when the week switches
+        # week = (datetime.datetime.now().isocalendar()[1] % 2) + 1
         return week
 
     @staticmethod
