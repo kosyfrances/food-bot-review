@@ -1,5 +1,5 @@
 """
-Development specific settings for GentleEdit project.
+Development specific settings for django_foodbot project.
 """
 
 from .base import *

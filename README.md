@@ -12,6 +12,29 @@ Want to contribute? Great!
 
 You need to have postgres installed and set up on your machine. You also need python, and a virtual environment set up.
 
+Clone the repository from [github](https://www.github.com)
+```
+git clone https://github.com/andela-kanyanwu/food-bot-review.git
+```
+
+### Installation
+
+In your virtual environment, install everything in the requirements.txt file
+
+```
+pip install -r requirements.txt
+```
+
+**create a `.env.yml` file and add it to your root file, have the following config in the .env.yml file.**
+
+__.env.yml format:__
+
+```
+    SECRET_KEY:
+      'some-random-crazy-value'
+```
+
+
 Follow these processes to configure the bot and run locally:
 
 Create a bot on [Slack](https://www.slack.com) that you will use to test whatever you do.
@@ -31,39 +54,32 @@ DAEMON: False
 ```
 Be sure to replace the _SLACK_TOKEN_ in the rtmbot.conf file with the one from the bot you created.
 
-**To get the latest food-bot database from heroku stage:**
-
-First we will need to add you as a collaborator.
+**Be sure to have a postgress database setup named food_bot locally:**
 
 On your terminal,
-
-**Create a database named food_bot locally:**
 ```
 createdb food_bot
 ```
-**Create tables:**
-```
-CREATE TABLE menu_table (id SERIAL PRIMARY KEY,
-                   day VARCHAR(10) NOT NULL,
-                   food VARCHAR(60) NOT NULL,
-                   meal VARCHAR(10) NOT NULL,
-                   option INT NOT NULL,
-                   week INT NOT NULL
-                 );
+You can also use the PgAdmin Tool to do that manually.
 
-CREATE TABLE rating (id SERIAL PRIMARY KEY,
-                    date timestamp without time zone default (now() at time zone 'utc'),
-                    user_id VARCHAR(20),
-                    menu_id INT REFERENCES menu_table(id),
-                    rate INT NOT NULL,
-                    comment TEXT
-                   );
+**Run the following command to create the tables **
 ```
-**Download the database backup from heroku:**
+python django_foodbot/manage.py makemigrations
+```
+```
+python django_foodbot/manage.py migrate
+```
+
+###Get the latest food-bot database from heroku stage.
+
+First we will need to add you as a collaborator on heroku
+
+**To download the database backup from heroku:**
+**Note:** You will need to be added as a collaborator on heroku staging
 ```
 heroku pg:backups capture --app APPNAME
 ```
-**Be sure to replace APPNAME with the app name of app on staging**
+**Be sure to replace APPNAME with the app name(staging-foodbot)**
 
 Next,
 ```
@@ -80,30 +96,6 @@ You can click [here](https://devcenter.heroku.com/articles/heroku-postgres-impor
 
 **We will work on creating a script that would do the setup automatically for you but for now, please follow these steps and let any of the collaborators know if you have any issues.**
 
-### Database structure
-**Database name** - food_bot
-
-**Number of tables** - 2
-
-**Tables** -  meal, rating
-
-Rating has a many to one relationship to Meal via the meal_id.
-
-**Structure of the meal table:**
-
-id | day | food | meal | option | week
-
-**Structure of the rating table:**
-
-id | date | user_id | meal_id | rate | comment
-
-### Installation
-
-In your virtual environment, install everything in the requirements.txt file
-
-```
-pip install -r requirements.txt
-```
 
 ### Start the bot
 
