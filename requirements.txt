@@ -5,6 +5,7 @@ dj-static==0.0.6
 Django==1.8.2
 django-envie==0.0.9
 django-postgrespool==0.3.0
+django-rest-swagger==0.3.4
 django-toolbelt==0.0.1
 djangorestframework==3.2.5
 docopt==0.6.2
