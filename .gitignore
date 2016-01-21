@@ -21,3 +21,5 @@ django_foodbot/staticfiles/
 
 # env.yml
 .env.yml
+
+.coverage.*

@@ -1,3 +1,6 @@
+from datetime import datetime
+from datetime import timedelta
+
 from rest_framework import filters
 from rest_framework.generics import ListAPIView
 
@@ -43,5 +46,24 @@ class RatingList(ListAPIView):
         for the currently authenticated user.
         """
         queryset = Rating.objects.all()
+
+        return queryset
+
+
+class WeeklyRatings(ListAPIView):
+    """
+    List all ratings and comments for the week
+    """
+    model = Rating
+    serializer_class = RatingSerializer
+    pagination_class = LimitOffsetpage
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('date')
+
+    def get_queryset(self):
+
+        enddate = datetime.today()
+        startdate = enddate + timedelta(days=-8)
+        queryset = Rating.objects.filter(date__range=[startdate, enddate])
 
         return queryset
