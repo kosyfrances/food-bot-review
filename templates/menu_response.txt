@@ -1,9 +1,17 @@
-Here is the menu.```
+```
+Here is the menu for ${day.title()}
+----------------------------------------------------------
 % for mealtime in sorted(menu.keys()):
-${mealtime.title()}
+${mealtime.upper()}
     %for option in sorted(menu[mealtime].keys()):
-option ${option} : ${menu[mealtime][option]}
+OPTION ${option} : ${menu[mealtime][option]}
     %endfor
 
 % endfor
+
+RATE TODAY'S MEAL: rate [MEAL] [OPTION] [RATING] [COMMENT]
+EXAMPLE: rate breakfast 1 4 great meal I really enjoyed it
+
+NOTE: [RATING] is between 1 and 5 while [COMMENT] is optional
+Meal options are above
 ```

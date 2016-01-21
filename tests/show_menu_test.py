@@ -62,7 +62,7 @@ class TestShowMenu(unittest.TestCase):
         weekend_response_dict2 = Helper.get_menu_template_context(['menu',
                                                                    'SUNDAY'])
         weekday_response_dict = Helper.get_menu_template_context(['menu',
-                                                                  'tuesday'])
+                                                                  'monday'])
         menu_response_dict = Helper.get_menu_template_context(['menu'])
 
         self.assertEqual(invalid_day_response_dict,
@@ -72,9 +72,9 @@ class TestShowMenu(unittest.TestCase):
         self.assertEqual(weekend_response_dict2,
                          {'template': 'weekend_meal_error', 'context': {}})
         self.assertEqual(weekday_response_dict, {'template': 'menu_response',
-                         'context': {'menu': 'menu list as dict'}})
+                         'context': {'menu': 'menu list as dict', 'day': 'monday'}})
         self.assertEqual(menu_response_dict, {'template': 'menu_response',
-                         'context': {'menu': 'menu list as dict'}})
+                         'context': {'menu': 'menu list as dict', 'day': 'monday'}})
 
         CustomSQL.query.assert_called_with(
             'SELECT food, meal, option FROM menu_table WHERE day = (%s) AND week = (%s)',('monday', '1'))
