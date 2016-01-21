@@ -99,7 +99,7 @@ class Helper:
             if menu:
                 menu_dict = Helper.convert_menu_list_to_dict(menu)
                 return {'template': 'menu_response',
-                        'context': {'menu': menu_dict}}
+                        'context': {'menu': menu_dict, 'day': day}}
 
         elif day in ['saturday', 'sunday']:
             return {'template': 'weekend_meal_error', 'context': {}}

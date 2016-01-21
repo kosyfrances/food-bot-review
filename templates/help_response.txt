@@ -1,12 +1,13 @@
-```Shows help menu: help
+```SHOW HELP MENU: help
 
-Get the menu for today: menu
+GET THE MENU FOR TODAY: menu
 
-Get the menu for any day: menu [DAY_OF_WEEK]
-Example: menu tuesday
+GET THE MENU FOR ANY DAY: menu [DAY_OF_WEEK]
+EXAMPLE: menu tuesday
 
-Rate today's meal: rate [meal] [option] [rating] [comment]
-Example: rate breakfast 1 4 great meal I really enjoyed it
-NOTE: [rating] is between 1 and 5 while [comment] is optional
+RATE TODAY'S MEAL: rate [MEAL] [OPTION] [RATING] [COMMENT]
+EXAMPLE: rate breakfast 1 4 great meal I really enjoyed it
+
+NOTE: [RATING] is between 1 and 5 while [COMMENT] is optional
 For meal option, send the command `menu` to get menu options
 ```
