@@ -27,3 +27,8 @@ class TestMenu(FoodBotApiTestCase):
         url = reverse_lazy('ratinglist')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+    def test_get_weekly_ratings(self):
+        url = reverse_lazy('weeklyratinglist')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
