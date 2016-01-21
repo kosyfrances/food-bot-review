@@ -9,9 +9,9 @@ OPTION ${option} : ${menu[mealtime][option]}
 
 % endfor
 
-RATE TODAY'S MEAL: rate [MEAL] [OPTION] [RATING] [COMMENT]
+RATE TODAY'S MEAL: rate <MEAL> <OPTION> <RATING> <COMMENT>
 EXAMPLE: rate breakfast 1 4 great meal I really enjoyed it
 
-NOTE: [RATING] is between 1 and 5 while [COMMENT] is optional
+NOTE: <RATING> is between 1 (LOWEST) and 5 (HIGHEST) while <COMMENT> is optional
 Meal options are above
 ```

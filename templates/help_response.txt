@@ -2,12 +2,12 @@
 
 GET THE MENU FOR TODAY: menu
 
-GET THE MENU FOR ANY DAY: menu [DAY_OF_WEEK]
+GET THE MENU FOR ANY DAY: menu <DAY_OF_WEEK>
 EXAMPLE: menu tuesday
 
-RATE TODAY'S MEAL: rate [MEAL] [OPTION] [RATING] [COMMENT]
+RATE TODAY'S MEAL: rate <MEAL> <OPTION> <RATING> <COMMENT>
 EXAMPLE: rate breakfast 1 4 great meal I really enjoyed it
 
-NOTE: [RATING] is between 1 and 5 while [COMMENT] is optional
+NOTE: <RATING> is between 1 (LOWEST) and 5 (HIGHEST) while <COMMENT> is optional
 For meal option, send the command `menu` to get menu options
 ```
