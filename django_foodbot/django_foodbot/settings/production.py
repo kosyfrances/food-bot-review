@@ -1,14 +1,10 @@
-"""
-Production specific settings for django_foodbot project.
-"""
+"""Production specific settings for django_foodbot project."""
 
 from .base import *
 import dj_database_url
 import os
 
 APPLICATION_DIR = os.path.dirname(globals()['__file__'])
-
-DEBUG = False
 
 DATABASES = {
     'default': dj_database_url.config()
