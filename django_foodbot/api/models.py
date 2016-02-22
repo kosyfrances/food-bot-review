@@ -4,7 +4,7 @@ from django.db import models
 class Menu(models.Model):
 
     day = models.CharField(max_length=10, blank=False, null=False)
-    food = models.CharField(max_length=60, blank=False, null=False)
+    food = models.CharField(max_length=120, blank=False, null=False)
     meal = models.CharField(max_length=10, blank=False, null=False)
     option = models.IntegerField(null=False)
     week = models.IntegerField(null=False)
@@ -14,7 +14,7 @@ class Menu(models.Model):
         db_table = 'menu_table'
 
     def __unicode__(self):
-        return u'%s %s' % (self.day, self.week)
+        return u'%s %s %s' % (self.day, self.week, self.meal)
 
 
 class Rating(models.Model):
