@@ -4,7 +4,7 @@ from django.db import models
 class Menu(models.Model):
 
     day = models.CharField(max_length=10, blank=False, null=False)
-    food = models.CharField(max_length=120, blank=False, null=False)
+    food = models.TextField()
     meal = models.CharField(max_length=10, blank=False, null=False)
     option = models.IntegerField(null=False)
     week = models.IntegerField(null=False)
