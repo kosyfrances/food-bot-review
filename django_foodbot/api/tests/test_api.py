@@ -11,9 +11,9 @@ class FoodBotApiTestCase(APITestCase):
         self.client = APIClient()
         self.menu = Menu.objects.create(day='monday', food='rice',
                                         meal='lunch', option=1, week=1)
-        self.Rating = Rating.objects.create(date='2015-11-04 06:42:20.5587',
+        self.Rating = Rating.objects.create(created_at='2015-11-04 06:42:20.5587',
                                             user_id='U0BT88BS', menu=self.menu,
-                                            rate=3, comment='wonderul')
+                                            rate=3, comment='wonderful')
 
 
 class TestMenu(FoodBotApiTestCase):

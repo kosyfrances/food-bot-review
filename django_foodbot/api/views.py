@@ -38,7 +38,7 @@ class RatingList(ListAPIView):
     serializer_class = RatingSerializer
     pagination_class = LimitOffsetpage
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('date')
+    search_fields = ('created_at')
 
     def get_queryset(self):
         """
@@ -58,12 +58,12 @@ class WeeklyRatings(ListAPIView):
     serializer_class = RatingSerializer
     pagination_class = LimitOffsetpage
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('date')
+    search_fields = ('created_at')
 
     def get_queryset(self):
 
         enddate = datetime.today()
         startdate = enddate + timedelta(days=-8)
-        queryset = Rating.objects.filter(date__range=[startdate, enddate])
+        queryset = Rating.objects.filter(created_at__range=[startdate, enddate])
 
         return queryset
