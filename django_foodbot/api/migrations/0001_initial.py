@@ -29,14 +29,14 @@ class Migration(migrations.Migration):
             name='Rating',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('date', models.DateTimeField(auto_now_add=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('user_id', models.CharField(max_length=20)),
                 ('rate', models.IntegerField()),
                 ('comment', models.TextField(default=b'no comment')),
                 ('menu', models.ForeignKey(related_name='rating', to='api.Menu')),
             ],
             options={
-                'ordering': ('-date',),
+                'ordering': ('-created_at',),
                 'db_table': 'rating',
             },
         ),
