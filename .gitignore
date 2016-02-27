@@ -14,7 +14,7 @@ staticfiles
 *.mo
 *.pot
 # database migrations
-django_foodbot/*/migrations/*
+# django_foodbot/*/migrations/*
 
 # staticfiles
 django_foodbot/staticfiles/
