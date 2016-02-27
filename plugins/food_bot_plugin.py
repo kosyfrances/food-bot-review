@@ -53,7 +53,7 @@ class Helper:
 
     @staticmethod
     def get_date():
-        return datetime.datetime.now().strftime('%A %b %d %Y')
+        return datetime.datetime.now()
 
     @staticmethod
     def get_week_number():
@@ -181,8 +181,9 @@ class Helper:
             query_string = 'SELECT id FROM menu_table WHERE meal = (%s) AND day = (%s) AND week = (%s) AND option = (%s)'
             result = sql.query(query_string, variables)
             food_menu_id = int(result[0][0])
-            variables = (user_id, food_menu_id, rating, comment)
-            query_string = "INSERT INTO rating (user_id, menu_id, rate, comment) VALUES (%s, %s, %s, %s)"
+            get_date = Helper.get_date()
+            variables = (user_id, food_menu_id, rating, comment, get_date,)
+            query_string = "INSERT INTO rating (user_id, menu_id, rate, comment, created_at) VALUES (%s, %s, %s, %s, %s)"
             sql.command(query_string, variables)
             return {'template': 'rating_response', 'context': {}}
 
