@@ -10,13 +10,58 @@ Food-bot is a Slack bot written in python that connects via the RTM API. It was 
 
 Want to contribute? Great!
 
-You need to have postgres installed and set up on your machine. You also need python, and a virtual environment set up.
+You need to have postgreSQL installed and set up on your machine. You also need python, and a virtual environment set up.
+
+Clone the repository from [GitHub](https://www.github.com)
+```
+git clone https://github.com/andela-kanyanwu/food-bot-review.git
+```
+
+### Installation
+
+In your virtual environment, install everything in the requirements.txt file
+
+```
+pip install -r requirements.txt
+```
+
+**create a `.env.yml` file and add it to your root file, have the following config in the .env.yml file.**
+
+__.env.yml format:__
+
+```
+    SECRET_KEY:
+      'some-random-crazy-value'
+    DEBUG:
+      'True'
+```
+
+## Database
+
+On your terminal,
+```
+createdb food_bot
+```
+You can use PgAdmin or its alternative to create the database.
+
+*Run the following command to create the tables*
+```
+python django_foodbot/manage.py migrate
+```
+
+### Populate your local database with foodbot data.
+
+*Run the following command to populate your local database with data from the fixtures*
+```
+python django_foodbot/manage.py loaddata initial_data.json
+```
+
+## Set up your environment to test the bot locally
+*Ask any of the collaborators for a slack bot api key. You will also be added to the food-review slack organisation where you can test foodbot while working.*
 
 Follow these processes to configure the bot and run locally:
 
-Create a bot on [Slack](https://www.slack.com) that you will use to test whatever you do.
-
-    On your terminal,
+On your terminal,
 ```
 cp doc/example-config/rtmbot.conf .
 ```
@@ -31,80 +76,6 @@ DAEMON: False
 ```
 Be sure to replace the _SLACK_TOKEN_ in the rtmbot.conf file with the one from the bot you created.
 
-**To get the latest food-bot database from heroku stage:**
-
-First we will need to add you as a collaborator.
-
-On your terminal,
-
-**Create a database named food_bot locally:**
-```
-createdb food_bot
-```
-**Create tables:**
-```
-CREATE TABLE menu_table (id SERIAL PRIMARY KEY,
-                   day VARCHAR(10) NOT NULL,
-                   food VARCHAR(60) NOT NULL,
-                   meal VARCHAR(10) NOT NULL,
-                   option INT NOT NULL,
-                   week INT NOT NULL
-                 );
-
-CREATE TABLE rating (id SERIAL PRIMARY KEY,
-                    date timestamp without time zone default (now() at time zone 'utc'),
-                    user_id VARCHAR(20),
-                    menu_id INT REFERENCES menu_table(id),
-                    rate INT NOT NULL,
-                    comment TEXT
-                   );
-```
-**Download the database backup from heroku:**
-```
-heroku pg:backups capture --app APPNAME
-```
-**Be sure to replace APPNAME with the app name of app on staging**
-
-Next,
-```
- curl -o latest.dump `heroku pg:backups --app APPNAME public-url`
-```
-**Restore to local database**
-```
-pg_restore --verbose --clean --no-acl --no-owner -h localhost -U MYUSER -d food_bot latest.dump
-```
-**Be sure to replace MYUSER with your postgres username.**
-
-You can click [here](https://devcenter.heroku.com/articles/heroku-postgres-import-export) to read more about importing databases from heroku
-
-
-**We will work on creating a script that would do the setup automatically for you but for now, please follow these steps and let any of the collaborators know if you have any issues.**
-
-### Database structure
-**Database name** - food_bot
-
-**Number of tables** - 2
-
-**Tables** -  meal, rating
-
-Rating has a many to one relationship to Meal via the meal_id.
-
-**Structure of the meal table:**
-
-id | day | food | meal | option | week
-
-**Structure of the rating table:**
-
-id | date | user_id | meal_id | rate | comment
-
-### Installation
-
-In your virtual environment, install everything in the requirements.txt file
-
-```
-pip install -r requirements.txt
-```
-
 ### Start the bot
 
 You will need to always restart the bot as the server does not automatically detect any change.
@@ -113,7 +84,7 @@ You will need to always restart the bot as the server does not automatically det
 ./rtmbot.py
 ```
 ### Development
-- Checkout to a new branch from master when working on any task.
+- *Checkout* to a new branch from master when working on any task.
 ```
 $(master) git checkout -b FEATURE_BRANCH
 #=> Switched to a new branch 'FEATURE_BRANCH'
@@ -129,10 +100,11 @@ git push --set-upstream origin FEATURE_BRANCH
 $(FEATURE_BRANCH): git fetch
 $(FEATURE_BRANCH): git rebase origin/master
 ```
-- If everything is fine and there haven't been any commits yet:
+- If everything is fine and there haven't been any commit yet:
 ```
 $(FEATURE_BRANCH): git push
 ```
-- You will need to git push --force if the rebase rewrote any commits, but first confirm with git status that you're on the correct branch.
+- You will need to git push --force if the rebase rewrote any commit but first confirm with *git status* that you are on the correct branch.
 - Create pull request against the STAGING branch when you are done for code review.
-- After review, your code-reviewer will merge your branch to staging branch, and if there are no issues, the pull request will be merged and branch will be deleted.
+- After review, your code reviewer will merge your branch to staging branch. *meal-bot* on the food-review slack is tied to the staging branch.  If everything works fine on *meal-bot*, your branch will be deleted and the staging branch will be merged to master.
+- Please note that the master branch is tied to *food_bot* on Andela slack. Do not push or merge to master until you are sure *meal-bot* on the food-review slack has no issues.
