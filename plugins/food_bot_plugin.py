@@ -57,11 +57,17 @@ class Helper:
 
     @staticmethod
     def get_week_number():
-        week = (datetime.datetime.now().isocalendar()[1] % 2)
-        if week == 0:
-            week = 2
+        from config import Config
+        config = Config()
+
+        if config['WEEK'] == 'A':
+            week = (datetime.datetime.now().isocalendar()[1] % 2)
+            if week == 0:
+                week = 2
+
         # fall back code here when the week switches
-        # week = (datetime.datetime.now().isocalendar()[1] % 2) + 1
+        if config['WEEK'] == 'B':
+            week = (datetime.datetime.now().isocalendar()[1] % 2) + 1
         return week
 
     @staticmethod
