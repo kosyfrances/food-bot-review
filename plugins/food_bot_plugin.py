@@ -23,7 +23,7 @@ def process_message(data):
             return
 
         channel = data['channel']
-        buff = str(data['text']).split(' ')
+        buff = data['text'].encode('ascii', 'ignore').split(' ')
         user_id = data['user']
         text_buffer = buff[0].lower()
 
