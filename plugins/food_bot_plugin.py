@@ -60,14 +60,17 @@ class Helper:
         from config import Config
         config = Config()
 
-        if config['WEEK'] == 'A':
-            week = (datetime.datetime.now().isocalendar()[1] % 2)
+        week = (datetime.datetime.now().isocalendar()[1] % 2)
+        config_week = config['FB__WEEK']
+        print config_week
+        if config_week == 'A':
             if week == 0:
                 week = 2
 
         # fall back code here when the week switches
-        if config['WEEK'] == 'B':
-            week = (datetime.datetime.now().isocalendar()[1] % 2) + 1
+        if config_week == 'B':
+            # WEEK is 0
+            week += 1
         return week
 
     @staticmethod
