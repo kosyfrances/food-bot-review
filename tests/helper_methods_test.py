@@ -11,12 +11,11 @@ class HelperMethodsTest(unittest.TestCase):
         in the envvars is A or B.
         """
         config = Config()
+        week_options = ['A', 'B']
 
         if os.path.exists('./rtmbot.conf'):
             config.load_yaml('rtmbot.conf')
-
+            self.assertIn(config['WEEK'], week_options)
         else:
             config.load_os_environ_vars('FB__')
-
-        week_options = ['A', 'B']
-        self.assertIn(config['WEEK'], week_options)
+            self.assertIn(config['FB__WEEK'], week_options)
