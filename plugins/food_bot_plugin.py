@@ -1,3 +1,4 @@
+import sys
 import datetime
 from mako.template import Template
 from custom_sql import CustomSQL
@@ -63,6 +64,7 @@ class Helper:
         week = (datetime.datetime.now().isocalendar()[1] % 2)
         config_week = config['FB__WEEK']
         print config_week
+        sys.stdout.flush()
         if config_week == 'A':
             if week == 0:
                 week = 2
