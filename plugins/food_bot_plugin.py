@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from mako.template import Template
 from custom_sql import CustomSQL
 
@@ -49,18 +49,18 @@ class Helper:
     """
     @staticmethod
     def get_day_of_week():
-        return datetime.datetime.now().strftime('%A').lower()
+        return datetime.now().strftime('%A').lower()
 
     @staticmethod
     def get_date():
-        return datetime.datetime.now()
+        return datetime.now()
 
     @staticmethod
     def get_week_number():
         from config import Config
         config = Config()
 
-        week = (datetime.datetime.now().isocalendar()[1] % 2)
+        week = (datetime.now().isocalendar()[1] % 2)
         config_week = config['WEEK']
 
         if config_week == 'A':
