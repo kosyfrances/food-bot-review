@@ -1,21 +1,44 @@
-import os
 import unittest
+from mock import patch
+from plugins.food_bot_plugin import Helper
 from config import Config
+from datetime import datetime
 
 
 class HelperMethodsTest(unittest.TestCase):
 
-    def test_that_config_week_is_only_A_or_B(self):
-        """
-        This test ensures that the only value set for 'WEEK'
-        in the envvars is A or B.
-        """
-        config = Config()
-        week_options = ['A', 'B']
+    @patch('plugins.food_bot_plugin.datetime')
+    @patch.dict(Config.config_dict, {'WEEK': 'A'})
+    def test_config_week_A_returns_right_option_when_week_is_0(self, mock_date):
+        mock_date.now.return_value = datetime(2016, 4, 20, 11, 11, 16, 398810)
+        week_number = Helper.get_week_number()
+        self.assertEqual(week_number, 2)
+        self.assertNotEqual(week_number, 1)
+        self.assertNotEqual(week_number, 3)
 
-        if os.path.exists('./rtmbot.conf'):
-            config.load_yaml('rtmbot.conf')
-            self.assertIn(config['WEEK'], week_options)
-        else:
-            config.load_os_environ_vars('FB__')
-            self.assertIn(config['FB__WEEK'], week_options)
+    @patch('plugins.food_bot_plugin.datetime')
+    @patch.dict(Config.config_dict, {'WEEK': 'A'})
+    def test_config_week_A_returns_right_option_when_week_is_1(self, mock_date):
+        mock_date.now.return_value = datetime(2016, 4, 25, 11, 11, 16, 398810)
+        week_number = Helper.get_week_number()
+        self.assertEqual(week_number, 1)
+        self.assertNotEqual(week_number, 2)
+        self.assertNotEqual(week_number, 3)
+
+    @patch('plugins.food_bot_plugin.datetime')
+    @patch.dict(Config.config_dict, {'WEEK': 'B'})
+    def test_config_week_B_returns_right_option_when_week_is_1(self, mock_date):
+        mock_date.now.return_value = datetime(2016, 4, 20, 11, 11, 16, 398810)
+        week_number = Helper.get_week_number()
+        self.assertEqual(week_number, 1)
+        self.assertNotEqual(week_number, 2)
+        self.assertNotEqual(week_number, 3)
+
+    @patch('plugins.food_bot_plugin.datetime')
+    @patch.dict(Config.config_dict, {'WEEK': 'B'})
+    def test_config_week_B_returns_right_option_when_week_is_2(self, mock_date):
+        mock_date.now.return_value = datetime(2016, 4, 25, 11, 11, 16, 398810)
+        week_number = Helper.get_week_number()
+        self.assertEqual(week_number, 2)
+        self.assertNotEqual(week_number, 1)
+        self.assertNotEqual(week_number, 3)
