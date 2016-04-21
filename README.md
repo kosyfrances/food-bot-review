@@ -36,6 +36,8 @@ __.env.yml format:__
       'True'
 ```
 
+*Ask any of the collaborators for the _SECRET_KEY_*
+
 ## Database
 
 On your terminal,
@@ -75,7 +77,7 @@ ENVIRONMENT: 'local'
 DAEMON: False
 WEEK: 'B'
 ```
-Be sure to replace the _SLACK_TOKEN_ in the rtmbot.conf file with the one from the bot you created.
+Be sure to replace the _SLACK_TOKEN_ in the rtmbot.conf file with the slack bot api key given to you.
 
 ### Start the bot
 
