@@ -10,7 +10,7 @@ Food-bot is a Slack bot written in python that connects via the RTM API. It was 
 
 Want to contribute? Great!
 
-You need to have postgreSQL installed and set up on your machine. You also need python, and a virtual environment set up.
+You need to have postgreSQL installed and set up on your machine. You also need python, and a [virtual environment](https://virtualenvwrapper.readthedocs.org/en/latest/install.html) set up.
 
 Clone the repository from [GitHub](https://www.github.com)
 ```
@@ -73,6 +73,7 @@ DEBUG: True
 SLACK_TOKEN: "xoxb-11111111111-222222222222222"
 ENVIRONMENT: 'local'
 DAEMON: False
+WEEK: 'B'
 ```
 Be sure to replace the _SLACK_TOKEN_ in the rtmbot.conf file with the one from the bot you created.
 
