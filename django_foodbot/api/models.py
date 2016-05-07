@@ -20,7 +20,7 @@ class Menu(models.Model):
 class Rating(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
-    user_id = models.CharField(max_length=20)
+    user_id = models.CharField(max_length=20, blank=False, null=False)
     menu = models.ForeignKey(Menu, related_name='rating')
     rate = models.IntegerField(blank=False, null=False)
     comment = models.TextField(default='no comment')

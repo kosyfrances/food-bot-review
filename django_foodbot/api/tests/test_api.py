@@ -5,8 +5,8 @@ from api.models import Menu, Rating
 
 
 class FoodBotApiTestCase(APITestCase):
+    """Class defined to test foodbot api."""
 
-    '''Class defined to test foodbot api.'''
     def setUp(self):
         self.client = APIClient()
         self.menu = Menu.objects.create(day='monday', food='rice',
