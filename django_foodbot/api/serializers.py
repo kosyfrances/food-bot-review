@@ -12,8 +12,8 @@ class MenuSerializer(serializers.ModelSerializer):
 
 class RatingSerializer(serializers.ModelSerializer):
 
-    menu = MenuSerializer(many=True, read_only=True)
+    menu = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Rating
-        fields = ('id', 'created_at', 'user_id', 'rate', 'comment', 'rating')
+        fields = ('id', 'created_at', 'user_id', 'rate', 'comment', 'menu')

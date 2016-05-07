@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta
 
-from django.http import Http404
+from django.shortcuts import get_object_or_404
 
-from rest_framework import filters, status
+from rest_framework import filters
 from rest_framework.generics import ListAPIView, CreateAPIView
-from rest_framework.response import Response
 
 from api.models import Menu, Rating
 from api.serializers import RatingSerializer, MenuSerializer
@@ -76,24 +75,6 @@ class PostRatings(CreateAPIView):
 
     serializer_class = RatingSerializer
 
-    def check_item_exist(self, item_id):
-        try:
-            return Menu.objects.get(id=item_id)
-        except Menu.DoesNotExist:
-            raise Http404
-
-    def post(self, request, id, format=None):
-        menu = self.check_item_exist(id)
-
-        ratings_dict = request.data
-        ratings_dict.update({unicode('menu'): unicode(id)})
-
-        rating_serializer = RatingSerializer(data=ratings_dict)
-
-        if rating_serializer.is_valid():
-            import pdb; pdb.set_trace()
-            rating_serializer.save()
-            content = {'status': 'Success'}
-            return Response(content, status=status.HTTP_201_CREATED)
-
-        return Response(rating_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def perform_create(self, serializer):
+        menu = get_object_or_404(Menu, pk=self.kwargs.get('id'))
+        serializer.save(menu=menu)
