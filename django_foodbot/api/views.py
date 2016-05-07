@@ -11,10 +11,8 @@ from api.setpage import LimitOffsetpage
 
 
 class MenuList(ListAPIView):
+    """List all the Menu items."""
 
-    """
-    List all the Menu items.
-    """
     model = Menu
     serializer_class = MenuSerializer
     pagination_class = LimitOffsetpage
@@ -32,9 +30,8 @@ class MenuList(ListAPIView):
 
 
 class RatingList(ListAPIView):
-    """
-    List all ratings and comments
-    """
+    """List all ratings and comments."""
+
     model = Rating
     serializer_class = RatingSerializer
     pagination_class = LimitOffsetpage
@@ -52,9 +49,8 @@ class RatingList(ListAPIView):
 
 
 class WeeklyRatings(ListAPIView):
-    """
-    List all ratings and comments for the week
-    """
+    """List all ratings and comments for the week."""
+
     model = Rating
     serializer_class = RatingSerializer
     pagination_class = LimitOffsetpage
