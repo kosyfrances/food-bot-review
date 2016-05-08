@@ -45,7 +45,7 @@ def process_message(data):
 
 class Helper:
     """
-    Contains helper functions for validation and and sending the right context
+    Contains helper functions for validation and sending the right context.
     """
     @staticmethod
     def get_day_of_week():

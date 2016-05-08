@@ -1,4 +1,4 @@
-'''API urls defined for views.'''
+"""API urls defined for views."""
 
 from django.conf.urls import url
 
@@ -12,6 +12,8 @@ urlpatterns = [
     url(r'^rating/all/$', views.RatingList.as_view(), name='ratinglist'),
     url(r'^rating/week/$', views.WeeklyRatings.as_view(),
         name='weeklyratinglist'),
+    url(r'^rating/(?P<id>[0-9]+)/create/$', views.PostRatings.as_view(),
+        name='addrating'),
 ]
 
 
