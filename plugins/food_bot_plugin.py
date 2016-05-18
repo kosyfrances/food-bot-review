@@ -156,6 +156,17 @@ class Helper:
             return True
 
     @staticmethod
+    def check_multiple_rating(user_id):
+        sql = CustomSQL()
+        variables = (user_id,)
+        query_string = 'SELECT created_at FROM rating WHERE user_id = (%s) ORDER BY id DESC LIMIT 2'
+        result = sql.query(query_string, variables)
+        p1 = datetime.fromtimestamp(float(str(result[0][-1]).strip())).strftime('%x')
+        if p1 == datetime.now().strftime('%x'):
+            return True
+
+
+    @staticmethod
     def get_rate_template_context(buff, user_id):
         """
         return the template name and correct context for rating and comment
@@ -185,6 +196,9 @@ class Helper:
             if Helper.check_rating(rating) is False:
                 return {'template': 'invalid_rating', 'context': {}}
 
+            if Helper.check_multiple_rating(user_id) is True:
+                return {'template': 'multiple_rating', 'context': {}}
+            #print(Helper.check_multiple_rating(user_id))
             variables = (meal, day, week, option,)
             sql = CustomSQL()
             query_string = 'SELECT id FROM menu_table WHERE meal = (%s) AND day = (%s) AND week = (%s) AND option = (%s)'
