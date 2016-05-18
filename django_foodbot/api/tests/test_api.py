@@ -85,13 +85,14 @@ class TestRating(FoodBotApiTestCase):
         testtime = current_testtime.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
         expected_content = {'comment': 'no comment', 'user_id': 'U0BT88BS',
-                            'created_at': testtime, 'rate': 3, 'id': 9,
+                            'created_at': testtime, 'rate': 3, 'id': 10,
                             'menu': {'week': 1, 'option': 1, 'food': 'rice',
-                                     'id': 7, 'meal': 'lunch', 'day': 'monday'}
+                                     'id': 8, 'meal': 'lunch', 'day': 'monday'}
                             }
 
         self.assertTrue(status.is_success(response.status_code))
-        self.assertDictEqual(json.loads(response.content)['results'][0], expected_content)
+        self.assertDictEqual(json.loads(response.content)['results'][0],
+                             expected_content)
 
     def test_get_all_rating_list_when_no_rating_exist(self):
         Rating.objects.all().delete()
@@ -102,8 +103,15 @@ class TestRating(FoodBotApiTestCase):
         self.assertEqual(json.loads(response.content)['results'], [])
 
     def test_post_ratings(self):
-        url = reverse_lazy('addrating', kwargs={'id': 6})
+        url = reverse_lazy('addrating', kwargs={'id': 7})
         data = {'user_id': '1', 'rate': 5}
         response = self.client.post(url, data)
 
         self.assertTrue(status.is_success(response.status_code))
+
+    def test_post_rating_with_invalid_meal_id(self):
+        url = reverse_lazy('addrating', kwargs={'id': 50})
+        data = {'user_id': '1', 'rate': 5}
+        response = self.client.post(url, data)
+
+        self.assertTrue(status.is_client_error(response.status_code))
