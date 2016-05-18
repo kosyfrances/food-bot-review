@@ -12,7 +12,7 @@ class MenuSerializer(serializers.ModelSerializer):
 
 class RatingSerializer(serializers.ModelSerializer):
 
-    menu = serializers.PrimaryKeyRelatedField(read_only=True)
+    menu = MenuSerializer(read_only=True)
 
     class Meta:
         model = Rating

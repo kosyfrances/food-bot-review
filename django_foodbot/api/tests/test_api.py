@@ -2,6 +2,7 @@ import json
 import mock
 from datetime import datetime
 
+from django.utils import timezone
 from django.core.urlresolvers import reverse_lazy
 
 from rest_framework import status
@@ -23,7 +24,7 @@ class FoodBotApiTestCase(APITestCase):
             mock_now.return_value = old_testtime
             self.rating = Rating.objects.create(created_at=old_testtime,
                                                 user_id='U0BT88BS', menu=self.menu,
-                                                rate=3, comment='wonderful')
+                                                rate=3, comment='good')
 
 
 class TestMenu(FoodBotApiTestCase):
@@ -55,8 +56,10 @@ class TestRating(FoodBotApiTestCase):
         url = reverse_lazy('ratinglist')
         response = self.client.get(url)
         expected_content = {'id': 4, 'created_at': '2016-04-20T10:11:16.398810Z',
-                            'user_id': 'U0BT88BS', 'rate': 3, 'comment': 'wonderful',
-                            'menu': 4}
+                            'user_id': 'U0BT88BS', 'rate': 3, 'comment': 'good',
+                            'menu': {'week': 1, 'option': 1, 'food': 'rice',
+                                     'id': 4, 'meal': 'lunch', 'day': 'monday'}
+                            }
 
         self.assertTrue(status.is_success(response.status_code))
         self.assertDictEqual(json.loads(response.content)['results'][0],
@@ -68,6 +71,27 @@ class TestRating(FoodBotApiTestCase):
 
         self.assertTrue(status.is_success(response.status_code))
         self.assertEqual(json.loads(response.content)['results'], [])
+
+    def test_weekly_ratings_is_returned_when_it_exist_for_the_week(self):
+        # Create a new rating for current week using mock time
+        current_testtime = timezone.now()
+        with mock.patch('django.utils.timezone.now') as mock_now:
+            mock_now.return_value = current_testtime
+            Rating.objects.create(created_at=current_testtime, user_id='U0BT88BS',
+                                  menu=self.menu, rate=3)
+
+        url = reverse_lazy('weeklyratinglist')
+        response = self.client.get(url)
+        testtime = current_testtime.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+
+        expected_content = {'comment': 'no comment', 'user_id': 'U0BT88BS',
+                            'created_at': testtime, 'rate': 3, 'id': 9,
+                            'menu': {'week': 1, 'option': 1, 'food': 'rice',
+                                     'id': 7, 'meal': 'lunch', 'day': 'monday'}
+                            }
+
+        self.assertTrue(status.is_success(response.status_code))
+        self.assertDictEqual(json.loads(response.content)['results'][0], expected_content)
 
     def test_get_all_rating_list_when_no_rating_exist(self):
         Rating.objects.all().delete()
