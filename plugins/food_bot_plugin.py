@@ -156,18 +156,18 @@ class Helper:
             return True
 
     @staticmethod
-    def check_multiple_rating(user_id):
+    def check_multiple_rating(user_id, meal):
         sql = CustomSQL()
-        variables = (user_id,)
-        last_rate = datetime(1970,1,1).strftime('%x')
+        variables = (user_id, meal,)
+        last_rate_day = datetime(1970,1,1).strftime('%x')
         today = datetime.now().strftime('%x')
 
-        query_string = 'SELECT created_at FROM rating WHERE user_id = (%s) ORDER BY id DESC LIMIT 2'
-        result = sql.query(query_string, variables)
+        query = 'SELECT created_at FROM rating INNER JOIN menu_table ON menu_table.id = menu_id WHERE rating.user_id = (%s) AND menu_table.meal = (%s) ORDER BY created_at DESC LIMIT 1'
+        result = sql.query(query, variables)
         if result:
-            last_rate = (result[0][0]).strftime('%x')
+            last_rate_day = (result[0][0]).strftime('%x')
 
-        if today == last_rate:
+        if today == last_rate_day:
             return True
 
 
@@ -201,7 +201,7 @@ class Helper:
             if Helper.check_rating(rating) is False:
                 return {'template': 'invalid_rating', 'context': {}}
 
-            if Helper.check_multiple_rating(user_id) is True:
+            if Helper.check_multiple_rating(user_id, meal) is True:
                 return {'template': 'multiple_rating', 'context': {}}
 
             variables = (meal, day, week, option,)
