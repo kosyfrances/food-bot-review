@@ -100,6 +100,7 @@ class TestRateMenu(unittest.TestCase):
     def test_valid_rate_returns_correct_template(self, *args):
         buff = ['rate', 'breakfast', '2', '5']
 
+        # import pdb; pdb.set_trace()
         rate_context = Helper.get_rate_template_context(buff, self.user_id)
 
         self.assertEqual(rate_context, {'template': 'rating_response',

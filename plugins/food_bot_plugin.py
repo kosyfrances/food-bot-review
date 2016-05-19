@@ -158,18 +158,13 @@ class Helper:
     @staticmethod
     def check_multiple_rating(user_id, meal):
         sql = CustomSQL()
-        variables = (user_id, meal,)
-        last_rate_day = datetime(1970,1,1).strftime('%x')
         today = datetime.now().strftime('%x')
+        variables = (user_id, meal, today,)
 
-        query = 'SELECT created_at FROM rating INNER JOIN menu_table ON menu_table.id = menu_id WHERE rating.user_id = (%s) AND menu_table.meal = (%s) ORDER BY created_at DESC LIMIT 1'
+        query = "SELECT count(created_at) FROM rating INNER JOIN menu_table ON menu_table.id = menu_id WHERE rating.user_id = (%s) AND menu_table.meal = (%s) AND to_char(rating.created_at, 'DD/MM/YY') = (%s)"
         result = sql.query(query, variables)
-        if result:
-            last_rate_day = (result[0][0]).strftime('%x')
-
-        if today == last_rate_day:
+        if int(result[0][0]) > 0:
             return True
-
 
     @staticmethod
     def get_rate_template_context(buff, user_id):
@@ -191,17 +186,17 @@ class Helper:
             check_option = Helper.check_option_selected(option, day, week,
                                                         meal)
 
-            if Helper.check_meal_selected(meal) is False:
+            if not Helper.check_meal_selected(meal):
                 return {'template': 'invalid_meal', 'context': {}}
 
-            if check_option['bool'] is False:
+            if not check_option['bool']:
                 return {'template': 'invalid_option',
                         'context': {'option_count': check_option['option']}}
 
-            if Helper.check_rating(rating) is False:
+            if not Helper.check_rating(rating):
                 return {'template': 'invalid_rating', 'context': {}}
 
-            if Helper.check_multiple_rating(user_id, meal) is True:
+            if Helper.check_multiple_rating(user_id, meal) == True:
                 return {'template': 'multiple_rating', 'context': {}}
 
             variables = (meal, day, week, option,)
