@@ -159,10 +159,15 @@ class Helper:
     def check_multiple_rating(user_id):
         sql = CustomSQL()
         variables = (user_id,)
+        last_rate = datetime(1970,1,1).strftime('%x')
+        today = datetime.now().strftime('%x')
+
         query_string = 'SELECT created_at FROM rating WHERE user_id = (%s) ORDER BY id DESC LIMIT 2'
         result = sql.query(query_string, variables)
-        p1 = datetime.fromtimestamp(float(str(result[0][-1]).strip())).strftime('%x')
-        if p1 == datetime.now().strftime('%x'):
+        if result:
+            last_rate = (result[0][0]).strftime('%x')
+
+        if today == last_rate:
             return True
 
 
@@ -198,7 +203,7 @@ class Helper:
 
             if Helper.check_multiple_rating(user_id) is True:
                 return {'template': 'multiple_rating', 'context': {}}
-            #print(Helper.check_multiple_rating(user_id))
+
             variables = (meal, day, week, option,)
             sql = CustomSQL()
             query_string = 'SELECT id FROM menu_table WHERE meal = (%s) AND day = (%s) AND week = (%s) AND option = (%s)'
