@@ -164,6 +164,8 @@ class Helper:
         result = sql.query(query, variables)
         if int(result[0][0]) > 0:
             return True
+        else:
+            return False
 
     @staticmethod
     def get_rate_template_context(buff, user_id):
