@@ -198,7 +198,7 @@ class Helper:
                 return {'template': 'invalid_rating', 'context': {}}
 
             if Helper.check_multiple_rating(user_id, meal):
-                return {'template': 'multiple_rating', 'context': {}}
+                return {'template': 'multiple_rating', 'context': {'meal': meal}}
 
             variables = (meal, day, week, option,)
             sql = CustomSQL()

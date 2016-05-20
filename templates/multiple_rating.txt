@@ -1,1 +1,1 @@
-```You can only rate once``` :frowning:
+```You can only rate ${meal} once``` :frowning:
