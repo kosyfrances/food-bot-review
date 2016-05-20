@@ -106,6 +106,7 @@ class TestRateMenu(unittest.TestCase):
     @patch.object(Helper, 'get_day_of_week', return_value='monday')
     @patch.object(Helper, 'get_week_number', return_value='1')
     @patch.object(Helper, 'check_multiple_rating', return_value=0)
+    @patch.object(Helper, 'check_rating_time', return_value=True)
     def test_valid_rate_returns_correct_template(self, *args):
         buff = ['rate', 'breakfast', '2', '5']
 
@@ -128,7 +129,20 @@ class TestRateMenu(unittest.TestCase):
         self.assertEqual(rate_context, {'template': 'multiple_rating',
                                         'context': {'meal': 'breakfast'}})
 
-    def test_check_rating_time_before_breakfast(self, *args):
+    @patch.object(CustomSQL, 'query', return_value=[(3L,)])
+    @patch.object(CustomSQL, 'command', return_value='command object')
+    @patch.object(Helper, 'get_day_of_week', return_value='monday')
+    @patch.object(Helper, 'get_week_number', return_value='1')
+    @patch.object(Helper, 'check_multiple_rating', return_value=0)
+    @patch.object(Helper, 'check_rating_time', return_value=False)
+    def test_rate_before_time_template_rendered_for_rating_before_meal_time(self, *args):
+        buff = ['rate', 'breakfast', '2', '5']
+
+        rate_context = Helper.get_rate_template_context(buff, self.user_id)
+        self.assertEqual(rate_context, {'template': 'rate_before_time',
+                                        'context': {'meal': 'breakfast'}})
+
+    def test_check_rating_time(self, *args):
         meal = {'breakfast': 'breakfast', 'lunch': 'lunch'}
         time = {'pre_breakfast': '06:45:00', 'post_breakfast': '07:45:10', 
         'pre_lunch': '13:00:10', 'post_lunch': '13:31:00'}
