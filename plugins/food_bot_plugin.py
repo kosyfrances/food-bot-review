@@ -45,7 +45,7 @@ def process_message(data):
 
 class Helper:
     """
-    Contains helper functions for validation and and sending the right context
+    Contains helper functions for validation and sending the right context.
     """
     @staticmethod
     def get_day_of_week():
@@ -156,6 +156,18 @@ class Helper:
             return True
 
     @staticmethod
+    def check_multiple_rating(user_id, meal):
+        sql = CustomSQL()
+        variables = (user_id, meal,)
+
+        query = 'SELECT count(rating.id) FROM rating INNER JOIN menu_table ON menu_table.id = menu_id WHERE rating.user_id = (%s) AND menu_table.meal = (%s) AND rating.created_at::date = now()::date'
+        result = sql.query(query, variables)
+        if int(result[0][0]) > 0:
+            return True
+        else:
+            return False
+
+    @staticmethod
     def get_rate_template_context(buff, user_id):
         """
         return the template name and correct context for rating and comment
@@ -175,15 +187,18 @@ class Helper:
             check_option = Helper.check_option_selected(option, day, week,
                                                         meal)
 
-            if Helper.check_meal_selected(meal) is False:
+            if not Helper.check_meal_selected(meal):
                 return {'template': 'invalid_meal', 'context': {}}
 
-            if check_option['bool'] is False:
+            if not check_option['bool']:
                 return {'template': 'invalid_option',
                         'context': {'option_count': check_option['option']}}
 
-            if Helper.check_rating(rating) is False:
+            if not Helper.check_rating(rating):
                 return {'template': 'invalid_rating', 'context': {}}
+
+            if Helper.check_multiple_rating(user_id, meal):
+                return {'template': 'multiple_rating', 'context': {}}
 
             variables = (meal, day, week, option,)
             sql = CustomSQL()

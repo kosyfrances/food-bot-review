@@ -39,6 +39,14 @@ class TestRateMenu(unittest.TestCase):
         self.assertFalse(Helper.check_rating('w'))
         self.assertFalse(Helper.check_rating('asdf'))
 
+    @patch.object(CustomSQL, 'query', return_value=[(0,)])
+    def test_check_multiple_rating_returns_false_if_count_is_zero(self, *args):
+        self.assertFalse(Helper.check_multiple_rating(self.user_id, 'breakfast'))
+
+    @patch.object(CustomSQL, 'query', return_value=[(3L,)])
+    def test_check_multiple_rating_returns_true_if_count_greater_than_zero(self, *args):
+        self.assertTrue(Helper.check_multiple_rating(self.user_id, 'breakfast'))
+
     @patch.object(Helper, 'get_day_of_week', return_value='saturday')
     @patch.object(Helper, 'get_week_number', return_value=2)
     def test_user_gets_weekend_rate_error_on_weekend(self, *args):
@@ -97,6 +105,7 @@ class TestRateMenu(unittest.TestCase):
     @patch.object(CustomSQL, 'command', return_value='command object')
     @patch.object(Helper, 'get_day_of_week', return_value='monday')
     @patch.object(Helper, 'get_week_number', return_value='1')
+    @patch.object(Helper, 'check_multiple_rating', return_value=0)
     def test_valid_rate_returns_correct_template(self, *args):
         buff = ['rate', 'breakfast', '2', '5']
 
@@ -106,3 +115,15 @@ class TestRateMenu(unittest.TestCase):
                                         'context': {}})
         CustomSQL.query.assert_called_with(
             'SELECT id FROM menu_table WHERE meal = (%s) AND day = (%s) AND week = (%s) AND option = (%s)', ('breakfast', 'monday', '1', '2'))
+
+    @patch.object(CustomSQL, 'query', return_value=[(3L,)])
+    @patch.object(CustomSQL, 'command', return_value='command object')
+    @patch.object(Helper, 'get_day_of_week', return_value='monday')
+    @patch.object(Helper, 'get_week_number', return_value='1')
+    @patch.object(Helper, 'check_multiple_rating', return_value=1)
+    def test_multiple_check_template_rendered_if_rate_count_is_greater_than_zero(self, *args):
+        buff = ['rate', 'breakfast', '2', '5']
+
+        rate_context = Helper.get_rate_template_context(buff, self.user_id)
+        self.assertEqual(rate_context, {'template': 'multiple_rating',
+                                        'context': {}})
