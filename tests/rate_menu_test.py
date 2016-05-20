@@ -126,4 +126,15 @@ class TestRateMenu(unittest.TestCase):
 
         rate_context = Helper.get_rate_template_context(buff, self.user_id)
         self.assertEqual(rate_context, {'template': 'multiple_rating',
-                                        'context': {}})
+                                        'context': {'meal': 'breakfast'}})
+
+    def test_check_rating_time_before_breakfast(self, *args):
+        meal = {'breakfast': 'breakfast', 'lunch': 'lunch'}
+        time = {'pre_breakfast': '06:45:00', 'post_breakfast': '07:45:10', 
+        'pre_lunch': '13:00:10', 'post_lunch': '13:31:00'}
+
+        self.assertFalse(Helper.check_rating_time(meal['breakfast'], time['pre_breakfast']))
+        self.assertTrue(Helper.check_rating_time(meal['breakfast'], time['post_breakfast']))
+        self.assertFalse(Helper.check_rating_time(meal['lunch'], time['pre_lunch']))
+        self.assertTrue(Helper.check_rating_time(meal['lunch'], time['post_lunch']))
+

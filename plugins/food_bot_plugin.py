@@ -156,6 +156,15 @@ class Helper:
             return True
 
     @staticmethod
+    def check_rating_time(meal, now=datetime.now().strftime('%H:%M:%S')):
+        breakfast_time = '07:45:00'
+        lunchtime = '13:30:00'
+        if (meal == 'breakfast' and now > breakfast_time) or (meal == 'lunch' and now > lunchtime):
+            return True
+        else:
+            return False
+
+    @staticmethod
     def check_multiple_rating(user_id, meal):
         sql = CustomSQL()
         variables = (user_id, meal,)
@@ -196,6 +205,9 @@ class Helper:
 
             if not Helper.check_rating(rating):
                 return {'template': 'invalid_rating', 'context': {}}
+
+            if not Helper.check_rating_time(meal):
+                return {'template': 'rate_before_time', 'context': {'meal': meal}}
 
             if Helper.check_multiple_rating(user_id, meal):
                 return {'template': 'multiple_rating', 'context': {'meal': meal}}
