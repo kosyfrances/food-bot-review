@@ -74,6 +74,16 @@ class Helper:
         return week
 
     @staticmethod
+    def get_meal_time(meal):
+        from config import Config
+        config = Config()
+
+        if meal == 'breakfast':
+            return config['BREAKFAST_TIME']
+        elif meal == 'lunch':
+            return config['LUNCHTIME']
+
+    @staticmethod
     def convert_menu_list_to_dict(menu):
         menu_dict = {}
         for meal in menu:
@@ -157,8 +167,8 @@ class Helper:
 
     @staticmethod
     def check_rating_time(meal, now=datetime.now().strftime('%H:%M:%S')):
-        breakfast_time = '07:45:00'
-        lunchtime = '13:30:00'
+        breakfast_time = Helper.get_meal_time('breakfast')
+        lunchtime = Helper.get_meal_time('lunch')
         if (meal == 'breakfast' and now > breakfast_time) or (meal == 'lunch' and now > lunchtime):
             return True
         else:

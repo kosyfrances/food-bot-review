@@ -24,3 +24,4 @@ django_foodbot/staticfiles/
 
 .coverage.*
 plans
+__pycache__

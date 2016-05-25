@@ -17,6 +17,8 @@ class TestRateMenu(unittest.TestCase):
         self.assertFalse(Helper.check_meal_selected(None))
         self.assertFalse(Helper.check_meal_selected(5))
 
+    @patch.object(Helper, 'get_meal_time', return_value='07:45:00')
+    @patch.object(Helper, 'check_rating_time', return_value=True)
     @patch.object(CustomSQL, 'query', return_value=[(3L,)])
     def test_check_option_selected(self, *args):
         option_str = Helper.check_option_selected('k', 'tuesday', '2',
@@ -119,6 +121,7 @@ class TestRateMenu(unittest.TestCase):
 
     @patch.object(CustomSQL, 'query', return_value=[(3L,)])
     @patch.object(CustomSQL, 'command', return_value='command object')
+    @patch.object(Helper, 'check_rating_time', return_value=True)
     @patch.object(Helper, 'get_day_of_week', return_value='monday')
     @patch.object(Helper, 'get_week_number', return_value='1')
     @patch.object(Helper, 'check_multiple_rating', return_value=1)
@@ -142,13 +145,13 @@ class TestRateMenu(unittest.TestCase):
         self.assertEqual(rate_context, {'template': 'rate_before_time',
                                         'context': {'meal': 'breakfast'}})
 
-    def test_check_rating_time(self, *args):
-        meal = {'breakfast': 'breakfast', 'lunch': 'lunch'}
-        time = {'pre_breakfast': '06:45:00', 'post_breakfast': '07:45:10', 
-        'pre_lunch': '13:00:10', 'post_lunch': '13:31:00'}
+    @patch.object(Helper, 'get_meal_time', return_value='07:45:00')
+    def test_check_rating_time_for_breakfast(self, *args):
+        self.assertTrue(Helper.check_rating_time('breakfast', '07:50:00'))
+        self.assertFalse(Helper.check_rating_time('breakfast', '07:44:00'))
 
-        self.assertFalse(Helper.check_rating_time(meal['breakfast'], time['pre_breakfast']))
-        self.assertTrue(Helper.check_rating_time(meal['breakfast'], time['post_breakfast']))
-        self.assertFalse(Helper.check_rating_time(meal['lunch'], time['pre_lunch']))
-        self.assertTrue(Helper.check_rating_time(meal['lunch'], time['post_lunch']))
+    @patch.object(Helper, 'get_meal_time', return_value='13:30:00')
+    def test_check_rating_time_for_lunch(self, *args):
+        self.assertFalse(Helper.check_rating_time('lunch', '13:29:00'))
+        self.assertTrue(Helper.check_rating_time('breakfast', '13:30:01'))
 
