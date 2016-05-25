@@ -1,6 +1,8 @@
 from datetime import datetime
 from mako.template import Template
 from custom_sql import CustomSQL
+from config import Config
+import sys
 
 # crontable = []
 outputs = []
@@ -57,7 +59,6 @@ class Helper:
 
     @staticmethod
     def get_week_number():
-        from config import Config
         config = Config()
 
         week = (datetime.now().isocalendar()[1] % 2)
@@ -75,16 +76,12 @@ class Helper:
 
     @staticmethod
     def get_meal_time(meal):
-        from config import Config
         config = Config()
 
-        try:
-            if meal == 'breakfast':
-                return config['BREAKFAST_TIME']
-            elif meal == 'lunch':
-                return config['LUNCHTIME']
-        except:
-            print('Check if you have breakfast and lunch times set')
+        if meal == 'breakfast':
+            return config['BREAKFAST_TIME']
+        elif meal == 'lunch':
+            return config['LUNCHTIME']
 
     @staticmethod
     def convert_menu_list_to_dict(menu):
@@ -172,10 +169,7 @@ class Helper:
     def check_rating_time(meal, now=datetime.now().strftime('%H:%M:%S')):
         breakfast_time = Helper.get_meal_time('breakfast')
         lunchtime = Helper.get_meal_time('lunch')
-        if (meal == 'breakfast' and now > breakfast_time) or (meal == 'lunch' and now > lunchtime):
-            return True
-        else:
-            return False
+        return (meal == 'breakfast' and now > breakfast_time) or (meal == 'lunch' and now > lunchtime)
 
     @staticmethod
     def check_multiple_rating(user_id, meal):
@@ -184,10 +178,7 @@ class Helper:
 
         query = 'SELECT count(rating.id) FROM rating INNER JOIN menu_table ON menu_table.id = menu_id WHERE rating.user_id = (%s) AND menu_table.meal = (%s) AND rating.created_at::date = now()::date'
         result = sql.query(query, variables)
-        if int(result[0][0]) > 0:
-            return True
-        else:
-            return False
+        return int(result[0][0]) > 0
 
     @staticmethod
     def get_rate_template_context(buff, user_id):

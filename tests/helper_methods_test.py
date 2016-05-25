@@ -44,16 +44,19 @@ class HelperMethodsTest(unittest.TestCase):
         self.assertNotEqual(week_number, 3)
 
     @patch.dict(Config.config_dict, {'BREAKFAST_TIME': '07:45:00'})
+    @patch.dict(Config.config_dict, {'LUNCHTIME': '13:30:00'})
     def test_config_get_meal_time_for_breakfast(self, *args):
-        meal_time = Helper.get_meal_time('breakfast')
-        self.assertEqual(meal_time, '07:45:00')
+        after_meal = Helper.check_rating_time('breakfast', '07:45:01')
+        before_meal = Helper.check_rating_time('breakfast', '07:44:59')
 
+        self.assertTrue(after_meal)
+        self.assertFalse(before_meal)
+
+    @patch.dict(Config.config_dict, {'BREAKFAST_TIME': '07:45:00'})
     @patch.dict(Config.config_dict, {'LUNCHTIME': '13:30:00'})
     def test_config_get_meal_time_for_lunch(self, *args):
-        meal_time = Helper.get_meal_time('lunch')
-        self.assertEqual(meal_time, '13:30:00')
+        after_meal = Helper.check_rating_time('lunch', '13:30:01')
+        before_meal = Helper.check_rating_time('lunch', '13:29:59')
 
-    def test_no_confi_for_meal_time(self, *args):
-        meal_time = Helper.get_meal_time('lunch')
-        self.assertRaises('Check if you have breakfast and lunch times set')
-
+        self.assertTrue(after_meal)
+        self.assertFalse(before_meal)

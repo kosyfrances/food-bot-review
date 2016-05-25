@@ -1,1 +1,1 @@
-```How can you rate ${meal} when you shouldn't have eaten?``` :smirk:
+```How can you rate ${meal} when you haven't had it yet?``` :smirk:
