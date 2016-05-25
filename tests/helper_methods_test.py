@@ -42,3 +42,14 @@ class HelperMethodsTest(unittest.TestCase):
         self.assertEqual(week_number, 2)
         self.assertNotEqual(week_number, 1)
         self.assertNotEqual(week_number, 3)
+
+    @patch.dict(Config.config_dict, {'BREAKFAST_TIME': '07:45:00'})
+    def test_config_get_meal_time_for_breakfast(self, *args):
+        meal_time = Helper.get_meal_time('breakfast')
+        self.assertEqual(meal_time, '07:45:00')
+
+    @patch.dict(Config.config_dict, {'LUNCHTIME': '13:30:00'})
+    def test_config_get_meal_time_for_lunch(self, *args):
+        meal_time = Helper.get_meal_time('lunch')
+        self.assertEqual(meal_time, '13:30:00')
+
