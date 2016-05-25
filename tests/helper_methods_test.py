@@ -53,3 +53,7 @@ class HelperMethodsTest(unittest.TestCase):
         meal_time = Helper.get_meal_time('lunch')
         self.assertEqual(meal_time, '13:30:00')
 
+    def test_no_confi_for_meal_time(self, *args):
+        meal_time = Helper.get_meal_time('lunch')
+        self.assertRaises('Check if you have breakfast and lunch times set')
+

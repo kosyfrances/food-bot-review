@@ -78,10 +78,13 @@ class Helper:
         from config import Config
         config = Config()
 
-        if meal == 'breakfast':
-            return config['BREAKFAST_TIME']
-        elif meal == 'lunch':
-            return config['LUNCHTIME']
+        try:
+            if meal == 'breakfast':
+                return config['BREAKFAST_TIME']
+            elif meal == 'lunch':
+                return config['LUNCHTIME']
+        except:
+            print('Check if you have breakfast and lunch times set')
 
     @staticmethod
     def convert_menu_list_to_dict(menu):
