@@ -19,6 +19,8 @@ staticfiles
 # staticfiles
 django_foodbot/staticfiles/
 
+scripts/
+
 # env.yml
 .env.yml
 
