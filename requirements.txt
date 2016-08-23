@@ -26,3 +26,4 @@ slackclient==0.15
 SQLAlchemy==1.0.9
 static3==0.6.1
 websocket-client==0.32.0
+newrelic
